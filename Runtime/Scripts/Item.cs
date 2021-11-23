@@ -16,6 +16,7 @@ namespace ExpressoBits.Inventory
         public float Weight => weight;
         public byte MaxStack => maxStack;
         public ItemObject ItemObjectPrefab => itemObjectPrefab;
+        public Category Category => category;
 
         [SerializeField] private byte id = 0;
         [SerializeField, TextArea] private string description;
@@ -23,6 +24,7 @@ namespace ExpressoBits.Inventory
         [SerializeField, Min(0.01f)] private float weight = 0.1f;
         [SerializeField, Min(1)] private byte maxStack = 64;
         [SerializeField] private ItemObject itemObjectPrefab;
+        [SerializeField] private Category category;
 
         // private static Items items;
         // private static Items Items

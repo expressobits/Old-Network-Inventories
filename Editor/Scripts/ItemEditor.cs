@@ -23,6 +23,7 @@ namespace ExpressoBits.Inventory.Editor
             SerializedProperty iconProperty = serializedObject.FindProperty("icon");
             SerializedProperty descriptionProperty = serializedObject.FindProperty("description");
             SerializedProperty itemObjectPrefabProperty = serializedObject.FindProperty("itemObjectPrefab");
+            SerializedProperty categoryProperty = serializedObject.FindProperty("category");
 
             EditorGUILayout.LabelField("ID", item.ID.ToString());
             EditorGUILayout.PropertyField(weightProperty);
@@ -30,6 +31,7 @@ namespace ExpressoBits.Inventory.Editor
             EditorGUILayout.PropertyField(iconProperty);
             EditorGUILayout.PropertyField(descriptionProperty);
             EditorGUILayout.PropertyField(itemObjectPrefabProperty);
+            EditorGUILayout.PropertyField(categoryProperty);
 
             serializedObject.ApplyModifiedProperties();
 

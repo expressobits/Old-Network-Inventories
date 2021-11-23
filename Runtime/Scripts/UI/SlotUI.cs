@@ -12,6 +12,7 @@ namespace ExpressoBits.Inventory.UI
         [SerializeField] private Text itemNameText;
         [SerializeField] private Text itemAmountText;
         [SerializeField] private GameObject selectedLayer;
+        [SerializeField] private Image background;
 
         [Header("Audios")]
         [SerializeField] private AudioClip enterAudioClip;
@@ -46,6 +47,7 @@ namespace ExpressoBits.Inventory.UI
             this.item = item;
             this.slot = slot;
             this.containerUI = containerUI;
+            background.color = item.Category.Color;
             //this.index = index;
             UpdateSlotData(item,slot);
         }
