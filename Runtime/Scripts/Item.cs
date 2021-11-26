@@ -1,7 +1,3 @@
-using System;
-using System.Linq;
-using System.Security.Principal;
-using Unity.Netcode;
 using UnityEngine;
 
 namespace ExpressoBits.Inventory
@@ -25,30 +21,6 @@ namespace ExpressoBits.Inventory
         [SerializeField, Min(1)] private byte maxStack = 64;
         [SerializeField] private ItemObject itemObjectPrefab;
         [SerializeField] private Category category;
-
-        // private static Items items;
-        // private static Items Items
-        // {
-        //     get
-        //     {
-        //         if (items == null)
-        //         {
-        //             Items[] list = Resources.FindObjectsOfTypeAll<Items>();
-        //             if (list.Length > 0)
-        //             {
-        //                 return list[0];
-        //             }
-        //         }
-        //         return items;
-        //     }
-        // }
-
-        private void Awake()
-        {
-// #if UNITY_EDITOR
-//             if (id == 0 && Items != null) id = Items.GetNewItemId();
-// #endif
-        }
 
         internal void Setup(byte id)
         {

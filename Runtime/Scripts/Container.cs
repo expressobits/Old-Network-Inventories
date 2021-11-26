@@ -130,6 +130,20 @@ namespace ExpressoBits.Inventory
             return false;
         }
 
+        public bool Has(Item item,int amount)
+        {
+            for (int i = 0; i < slots.Count; i++)
+            {
+                Slot slot = slots[i];
+                if (slot.itemId == item.ID)
+                {
+                    amount -= slot.amount;
+                }
+                if(amount <= 0) return true;
+            }
+            return false;
+        }
+
         public void Clear()
         {
             slots.Clear();
