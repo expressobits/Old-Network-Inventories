@@ -137,7 +137,7 @@ namespace ExpressoBits.Inventory
                 Slot slot = slots[i];
                 if (slot.itemId == item.ID)
                 {
-                    amount -= slot.amount;
+                    amount = (byte)Mathf.Max(amount - slot.amount,0);
                 }
                 if (amount <= 0) return true;
             }
