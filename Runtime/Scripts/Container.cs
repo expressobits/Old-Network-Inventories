@@ -19,9 +19,9 @@ namespace ExpressoBits.Inventory
             }
         }
 
-        public Action<Item> OnItemDrop;
-        public Action<Item, byte> OnLocalItemRemove;
-        public Action<Item, byte> OnLocalItemAdd;
+        public Action<Item> OnClientItemDrop;
+        public Action<Item, byte> OnClientItemRemove;
+        public Action<Item, byte> OnClientItemAdd;
         public static Action<Item> OnLocalItemDrop;
 
         [SerializeField] protected Items items;
@@ -108,7 +108,7 @@ namespace ExpressoBits.Inventory
                     slots[i] = slot;
                     if (slot.IsEmpty)
                     {
-                        slots.Remove(slot);
+                        slots.RemoveAt(i);
                     }
                     if (valueNoRemoved == 0) return 0;
                 }
@@ -130,7 +130,7 @@ namespace ExpressoBits.Inventory
             return false;
         }
 
-        public bool Has(Item item,int amount)
+        public bool Has(Item item, byte amount)
         {
             for (int i = 0; i < slots.Count; i++)
             {
@@ -139,7 +139,7 @@ namespace ExpressoBits.Inventory
                 {
                     amount -= slot.amount;
                 }
-                if(amount <= 0) return true;
+                if (amount <= 0) return true;
             }
             return false;
         }
@@ -176,13 +176,13 @@ namespace ExpressoBits.Inventory
         [ClientRpc]
         private void ItemAddClientRpc(byte itemId, byte amount)
         {
-            OnLocalItemAdd?.Invoke(itemId, amount);
+            OnClientItemAdd?.Invoke(itemId, amount);
         }
 
         [ClientRpc]
         private void ItemRemoveClientRpc(byte itemId, byte amount)
         {
-            OnLocalItemRemove?.Invoke(itemId, amount);
+            OnClientItemRemove?.Invoke(itemId, amount);
         }
 
         [ClientRpc]
@@ -190,11 +190,11 @@ namespace ExpressoBits.Inventory
         {
             Item item = items.GetItem(itemId);
             if (IsOwner && item != null) OnLocalItemDrop?.Invoke(item);
-            OnItemDrop?.Invoke(item);
+            OnClientItemDrop?.Invoke(item);
         }
         #endregion
-        
-        
+
+
 
         private static Vector3 GetPhysicPosition(Vector3 position)
         {

@@ -19,14 +19,14 @@ namespace ExpressoBits.Inventory
 
         private void OnEnable()
         {
-            container.OnLocalItemAdd += ItemGet;
-            container.OnLocalItemRemove += ItemDrop;
+            container.OnClientItemAdd += ItemGet;
+            container.OnClientItemRemove += ItemDrop;
         }
 
         private void OnDisable()
         {
-            container.OnLocalItemAdd -= ItemGet;
-            container.OnLocalItemRemove -= ItemGet;
+            container.OnClientItemAdd -= ItemGet;
+            container.OnClientItemRemove -= ItemGet;
         }
 
         private void ItemGet(Item item,byte amount)

@@ -58,7 +58,16 @@ namespace ExpressoBits.Inventory.UI
             {
                 iconImage.sprite = item.Icon;
                 itemNameText.text = item.name;
-                itemAmountText.text = slot.amount.ToString();
+                if(slot.amount == 1)
+                {
+                    if(itemAmountText.gameObject.activeSelf) itemAmountText.gameObject.SetActive(false);
+                }
+                else
+                {
+                    if(!itemAmountText.gameObject.activeSelf) itemAmountText.gameObject.SetActive(true);
+                    itemAmountText.text = slot.amount.ToString();
+                }
+                
             }
             else
             {

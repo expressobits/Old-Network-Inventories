@@ -12,14 +12,14 @@ namespace ExpressoBits.Inventory
         /// </summary>
         /// <value>Float value with sum of weight</value>
         public float Weight { get; }
-        
+
         /// <summary>
         /// Adds an T item with a quantity and returns values that were not added.
         /// </summary>
         /// <param name="item">T Item to be added</param>
         /// <param name="amount">Amount to be added</param>
         /// <returns>Amount not added in operation</returns>
-        public byte Add(T item,byte amount);
+        public byte Add(T item, byte amount);
 
         /// <summary>
         /// Remove item from index
@@ -27,7 +27,7 @@ namespace ExpressoBits.Inventory
         /// <param name="index">Slot index to be removed</param>
         /// <param name="amount">Amount to be removed</param>
         /// <returns>Amount not removed in operation</returns>
-        public byte RemoveInIndex(int index,byte amount);
+        public byte RemoveInIndex(int index, byte amount);
 
         /// <summary>
         /// Remove T item with a quantity and returns values that were not remove.
@@ -35,7 +35,7 @@ namespace ExpressoBits.Inventory
         /// <param name="item">T Item to be removed</param>
         /// <param name="amount">Amount to be removed</param>
         /// <returns>Amount not removed in operation</returns>
-        public byte Remove(T item,byte amount);
+        public byte Remove(T item, byte amount);
 
         /// <summary>
         /// Clear container
@@ -48,5 +48,13 @@ namespace ExpressoBits.Inventory
         /// <param name="item"></param>
         /// <returns>Return true if container contain T item</returns>
         public bool Has(T item);
+
+        /// <summary>
+        /// Check if container has item
+        /// </summary>
+        /// <param name="item"></param>
+        /// <param name="amount"></param>
+        /// <returns>Return true if container contain T item with amount</returns>
+        public bool Has(T item, byte amount);
     }
 }
