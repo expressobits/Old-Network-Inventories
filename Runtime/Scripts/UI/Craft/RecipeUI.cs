@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -9,6 +10,7 @@ namespace ExpressoBits.Inventory.UI
         private Recipe recipe;
         [SerializeField] private Image productIcon;
         [SerializeField] private Text timeToCraft;
+        [SerializeField] private Text productName;
         [SerializeField] private Button craftButton;
         [SerializeField] private List<RequiredItemUI> requiredItemsUI;
         private Crafter crafter;
@@ -28,7 +30,10 @@ namespace ExpressoBits.Inventory.UI
             this.crafter = crafter;
             this.recipe = recipe;
             productIcon.sprite = recipe.Product.Icon;
-            timeToCraft.text = recipe.TimeForCraft.ToString();
+            TimeSpan time = TimeSpan.FromSeconds(recipe.TimeForCraft);
+            string str = time.ToString(@"m\:ss");
+            productName.text = recipe.Product.Name;
+            timeToCraft.text = str;
             for (int i = 0; i < requiredItemsUI.Count; i++)
             {
                 if(recipe.RequiredItems.Count <= i)

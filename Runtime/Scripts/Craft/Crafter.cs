@@ -9,14 +9,14 @@ namespace ExpressoBits.Inventory
     public class Crafter : NetworkBehaviour
     {
         public bool IsCrafting => craftings.Count > 0f;
-        public List<Recipe> Recipes => recipes;
+        public List<Recipe> Recipes => recipes.AllRecipes;
         public Container Container => container;
         public NetworkList<Crafting> Craftings => craftings;
 
         public Action<Crafting> OnLocalAddCrafting;
         public Action<int> OnLocalRemoveCrafting;
 
-        [SerializeField] private List<Recipe> recipes;
+        [SerializeField] private Recipes recipes;
         private Container container;
         private NetworkList<Crafting> craftings;
 
@@ -85,7 +85,7 @@ namespace ExpressoBits.Inventory
             {
                 if(UseItems(recipe))
                 {
-                    craftings.Add(new Crafting(){ index = recipes.IndexOf(recipe), time = recipe.TimeForCraft});
+                    craftings.Add(new Crafting(){ index = recipes.AllRecipes.IndexOf(recipe), time = recipe.TimeForCraft});
                 }
             }
         }
@@ -100,7 +100,7 @@ namespace ExpressoBits.Inventory
                     crafting.time -= Time.deltaTime;
                     if(crafting.time < 0)
                     {
-                        container.Add(recipes[craftings[i].index].Product,1);
+                        container.Add(recipes.AllRecipes[craftings[i].index].Product,1);
                         craftings.RemoveAt(i);
                         i--;
                     }
@@ -116,21 +116,21 @@ namespace ExpressoBits.Inventory
         [ServerRpc]
         private void CraftServerRpc(int index)
         {
-            if(recipes.Count <= index) return;
-            Recipe recipe = recipes[index];
+            if(recipes.AllRecipes.Count <= index) return;
+            Recipe recipe = recipes.AllRecipes[index];
             Craft(recipe);
         }
 
         #region Client Calls
         public void CallCraft(int index)
         {
-            if(recipes.Count <= index) return;
+            if(recipes.AllRecipes.Count <= index) return;
             CraftServerRpc(index);
         }
 
         public void CallCraft(Recipe recipe)
         {
-            int index = recipes.IndexOf(recipe);
+            int index = recipes.AllRecipes.IndexOf(recipe);
             if(index >= 0) CallCraft(index);
         }
         #endregion
