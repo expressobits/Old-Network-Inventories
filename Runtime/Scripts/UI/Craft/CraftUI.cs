@@ -14,11 +14,11 @@ namespace ExpressoBits.Inventory.UI
 
         [Header("Craft")]
         [SerializeField] private RecipesPanel recipesPanel;
+        [SerializeField] private CraftsPanel craftsPanel;
 
         private void Awake()
         {
             Close();
-            
         }
 
         private void ChangedContainer()
@@ -32,6 +32,7 @@ namespace ExpressoBits.Inventory.UI
             this.crafter = crafter;
             recipesPanel.UpdateRecipes(crafter,crafter.Recipes);
             crafter.Container.OnChanged += ChangedContainer;
+            craftsPanel.SetCrafter(crafter);
         }
 
         public void Open()

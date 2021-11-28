@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
@@ -7,19 +8,51 @@ namespace ExpressoBits.Inventory
     [RequireComponent(typeof(Container))]
     public class Crafter : NetworkBehaviour
     {
-        public bool IsCrafting => craftingTimer.Value > 0f;
+        public bool IsCrafting => craftings.Count > 0f;
         public List<Recipe> Recipes => recipes;
         public Container Container => container;
+        public NetworkList<Crafting> Craftings => craftings;
+
+        public Action<Crafting> OnLocalAddCrafting;
+        public Action<int> OnLocalRemoveCrafting;
 
         [SerializeField] private List<Recipe> recipes;
         private Container container;
-
-        private NetworkVariable<float> craftingTimer;
-        private Recipe actualCraft;
+        private NetworkList<Crafting> craftings;
 
         private void Awake()
         {
             container = GetComponent<Container>();
+            craftings = new NetworkList<Crafting>();
+        }
+
+        private void OnEnable()
+        {
+            if(IsOwner)
+            {
+                craftings.OnListChanged += CraftingsChanged;
+            }
+        }
+
+        private void OnDisable()
+        {
+            if(IsOwner)
+            {
+                craftings.OnListChanged -= CraftingsChanged;
+            }
+        }
+
+        private void CraftingsChanged(NetworkListEvent<Crafting> changeEvent)
+        {
+            switch(changeEvent.Type)
+            {
+                case NetworkListEvent<Crafting>.EventType.Add:
+                    OnLocalAddCrafting?.Invoke(changeEvent.Value);
+                    break;
+                case NetworkListEvent<Crafting>.EventType.RemoveAt:
+                    OnLocalRemoveCrafting?.Invoke(changeEvent.Index);
+                    break;
+            }
         }
 
         public bool CanCraft(Recipe recipe)
@@ -52,8 +85,7 @@ namespace ExpressoBits.Inventory
             {
                 if(UseItems(recipe))
                 {
-                    actualCraft = recipe;
-                    craftingTimer.Value = recipe.TimeForCraft;
+                    craftings.Add(new Crafting(){ index = recipes.IndexOf(recipe), time = recipe.TimeForCraft});
                 }
             }
         }
@@ -62,19 +94,28 @@ namespace ExpressoBits.Inventory
         {
             if(IsCrafting && IsServer)
             {
-                craftingTimer.Value -= Time.deltaTime;
-                if(!IsCrafting)
+                for (int i = 0; i < craftings.Count; i++)
                 {
-                    container.Add(actualCraft.Product,1);
-                    actualCraft = null;
+                    Crafting crafting = craftings[i];
+                    crafting.time -= Time.deltaTime;
+                    if(crafting.time < 0)
+                    {
+                        container.Add(recipes[craftings[i].index].Product,1);
+                        craftings.RemoveAt(i);
+                        i--;
+                    }
+                    else
+                    {
+                        craftings[i] = crafting;
+                    }
                 }
+                
             }
         }
 
         [ServerRpc]
         private void CraftServerRpc(int index)
         {
-            if(IsCrafting) return;
             if(recipes.Count <= index) return;
             Recipe recipe = recipes[index];
             Craft(recipe);
@@ -83,7 +124,6 @@ namespace ExpressoBits.Inventory
         #region Client Calls
         public void CallCraft(int index)
         {
-            if(IsCrafting) return;
             if(recipes.Count <= index) return;
             CraftServerRpc(index);
         }
