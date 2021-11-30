@@ -6,8 +6,10 @@ namespace ExpressoBits.Inventory
     public class Category : ScriptableObject
     {
         public Color Color => color;
+        public Sprite Icon => icon;
 
         [SerializeField] private Color color = Color.white;
+        [SerializeField] private Sprite icon;
     }
 }
 

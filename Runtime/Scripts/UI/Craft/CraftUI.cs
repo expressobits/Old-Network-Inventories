@@ -8,6 +8,7 @@ namespace ExpressoBits.Inventory.UI
         public Crafter Crafter => crafter;
         public bool IsOpen => recipesPanel.gameObject.activeInHierarchy;
         private Crafter crafter;
+        private Category category;
 
         public Action OnOpenCraftUI;
         public Action OnCloseCraftUI;
@@ -21,16 +22,21 @@ namespace ExpressoBits.Inventory.UI
             Close();
         }
 
+        public void SetCategory(Category category)
+        {
+            this.category = category;
+        }
+
         private void ChangedContainer()
         {
-            if(IsOpen) recipesPanel.UpdateRecipes(crafter,crafter.Recipes);
+            if(IsOpen) recipesPanel.UpdateStats();
         }
 
         public void SetCrafter(Crafter crafter)
         {
             if(crafter && crafter != null) crafter.Container.OnChanged -= ChangedContainer;
             this.crafter = crafter;
-            recipesPanel.UpdateRecipes(crafter,crafter.Recipes);
+            recipesPanel.SetCrafter(crafter);
             crafter.Container.OnChanged += ChangedContainer;
             craftsPanel.SetCrafter(crafter);
         }
