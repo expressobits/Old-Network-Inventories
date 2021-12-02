@@ -6,6 +6,9 @@ namespace ExpressoBits.Inventory.UI
 {
     public class CategoryButton : MonoBehaviour
     {
+
+        public Category Category => category;
+
         [SerializeField] private Image icon;
         [SerializeField] private Image background;
         [SerializeField] private Button button;
@@ -22,11 +25,16 @@ namespace ExpressoBits.Inventory.UI
             OnSetCategory?.Invoke(category);
         }
 
+        public void SetInteractable(Category category)
+        {
+            button.interactable = this.category != category;
+        }
+
         public void SetCategory(Category category,Action<Category> onSetCategory)
         {
             this.category = category;
             icon.sprite = category.Icon;
-            background.color = category.Color;
+            //background.color = category.Color;
             OnSetCategory = onSetCategory;
         }
     }

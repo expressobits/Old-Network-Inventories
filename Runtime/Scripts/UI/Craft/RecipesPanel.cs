@@ -54,6 +54,10 @@ namespace ExpressoBits.Inventory.UI
             {
                 if (recipe.Product.Category == category) recipes.Add(recipe);
             }
+            foreach (var item in categoryButtons)
+            {
+                item.SetInteractable(category); 
+            }
             UpdateRecipes(recipes);
         }
 
