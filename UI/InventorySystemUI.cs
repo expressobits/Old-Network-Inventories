@@ -24,6 +24,7 @@ namespace ExpressoBits.Inventory.UI
         public Action OnInventoryOpen;
         public Action OnInventoryClose;
         public Action<SlotUI> OnPointerDown;
+        public Action<ContainerInteractor> OnSetupContainerInteractor;
 
         public bool IsOpen => playerContainer.gameObject.activeSelf;
 
@@ -67,6 +68,7 @@ namespace ExpressoBits.Inventory.UI
             this.characterInventory = containerInteractor;
             playerContainer.SetContainer(containerInteractor.Container);
             containerInteractor.OnOwnerOpenContainer += OpenLootContainer;
+            OnSetupContainerInteractor?.Invoke(containerInteractor);
         }
 
         public void PointerDownSlotUI(SlotUI slotUI,PointerEventData eventData)
@@ -121,7 +123,7 @@ namespace ExpressoBits.Inventory.UI
             {
                 if(lootContainer.Container.TryGetComponent(out StorageObject storageObject))
                 {
-                    characterInventory.RequestCloseChest(storageObject);
+                    characterInventory.RequestCloseStorage(storageObject);
                 }
             }
             lootContainer.gameObject.SetActive(false);

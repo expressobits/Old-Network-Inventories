@@ -10,17 +10,22 @@ namespace ExpressoBits.Inventory
     [RequireComponent(typeof(Container))]
     public class ContainerInteractor : NetworkBehaviour
     {
-
+        /// <summary>
+        /// Container relacionado ao interator, normalmente o inventário do jogador
+        /// </summary>
         public Container Container => container;
 
-        public static Action<Item> OnOwnerItemGet;
+        /// <summary>
+        /// Events fired only on the client that has the interactor's owener
+        /// </summary>
+        public Action<Item> OnOwnerItemGet;
         public Action<Container> OnOwnerOpenContainer;
 
         public Action<Item> OnItemGet;
         public Action<Container> OnOpenContainer;
         public Action<Container> OnCloseContainer;
 
-        [SerializeField] private Container container;
+        private Container container;
 
         private void Awake()
         {
@@ -28,17 +33,17 @@ namespace ExpressoBits.Inventory
         }
 
         #region Local Calls
-        public void RequestCloseChest(StorageObject storageObject)
+        public void RequestCloseStorage(StorageObject storageObject)
         {
             OpenStorageServerRpc(storageObject.NetworkObject, false);
         }
 
-        internal void RequestTrade(int index, ushort amount, Container from, Container to)
+        public void RequestTrade(int index, ushort amount, Container from, Container to)
         {
             TradeServerRpc(index, amount, from.NetworkObject, to.NetworkObject);
         }
 
-        internal void RequestDrop(int index, ushort amount, Container from)
+        public void RequestDrop(int index, ushort amount, Container from)
         {
             DropServerRpc(index, amount, from.NetworkObject);
         }

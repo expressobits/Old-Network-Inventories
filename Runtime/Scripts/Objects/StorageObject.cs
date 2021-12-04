@@ -1,5 +1,4 @@
 using System;
-using ExpressoBits.Inventory.UI;
 using Unity.Netcode;
 using UnityEngine;
 

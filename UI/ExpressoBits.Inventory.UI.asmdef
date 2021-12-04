@@ -1,0 +1,17 @@
+{
+    "name": "ExpressoBits.Inventory.UI",
+    "rootNamespace": "ExpressoBits.Inventory.UI",
+    "references": [
+        "GUID:4fdf46937d831f44dbee8eba7fcf8632",
+        "GUID:1491147abca9d7d4bb7105af628b223e"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
