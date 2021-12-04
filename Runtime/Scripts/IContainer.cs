@@ -1,10 +1,17 @@
-using System.Collections.Generic;
 using Unity.Netcode;
 
 namespace ExpressoBits.Inventory
 {
+    /// <summary>
+    /// Model of any structure that contains items (IItem)
+    /// </summary>
+    /// <typeparam name="T">whatever type IItem</typeparam>
     public interface IContainer<T> where T : IItem
     {
+        /// <summary>
+        /// All container slots
+        /// </summary>
+        /// <value>NetworkList with Slots</value>
         public NetworkList<Slot> Slots { get; }
 
         /// <summary>

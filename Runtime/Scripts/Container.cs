@@ -150,28 +150,6 @@ namespace ExpressoBits.Inventory
         }
         #endregion
 
-        [ServerRpc]
-        private void DropItemFromIndexServerRpc(int index, ushort amount, Vector3 position, Quaternion rotation)
-        {
-            if (slots.Count > index)
-            {
-                Slot slot = slots[index];
-                Item item = items.GetItem(slot.itemId);
-                if (item != null)
-                {
-                    ushort valueNoRemoved = RemoveInIndex(index, amount);
-                    for (int i = valueNoRemoved; i < amount; i++)
-                    {
-                        ItemObject itemObjectPrefab = item.ItemObjectPrefab;
-                        ItemObject itemObject = Instantiate(itemObjectPrefab, GetPhysicPosition(position), rotation);
-                        itemObject.NetworkObject.Spawn(true);
-                        ItemDropClientRpc(slot.itemId);
-                    }
-                }
-            }
-
-        }
-
         #region Client Callbacks
         [ClientRpc]
         private void ItemAddClientRpc(ushort itemId, ushort amount)
@@ -193,18 +171,6 @@ namespace ExpressoBits.Inventory
             OnClientItemDrop?.Invoke(item);
         }
         #endregion
-
-
-
-        private static Vector3 GetPhysicPosition(Vector3 position)
-        {
-            Ray ray = new Ray(position, Vector3.down);
-            if (Physics.Raycast(ray, out var hit, 15))
-            {
-                return hit.point;
-            }
-            return position;
-        }
 
     }
 }
