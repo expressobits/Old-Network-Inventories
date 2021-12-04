@@ -62,10 +62,11 @@ namespace ExpressoBits.Inventory.UI
             selectSlot.Clear();
         }
 
-        public void SetCharacterInventory(ContainerInteractor characterInventory)
+        public void SetCharacterInventory(ContainerInteractor containerInteractor)
         {
-            this.characterInventory = characterInventory;
-            playerContainer.SetContainer(characterInventory.Container);
+            this.characterInventory = containerInteractor;
+            playerContainer.SetContainer(containerInteractor.Container);
+            containerInteractor.OnOwnerOpenContainer += OpenLootContainer;
         }
 
         public void PointerDownSlotUI(SlotUI slotUI,PointerEventData eventData)
@@ -133,6 +134,11 @@ namespace ExpressoBits.Inventory.UI
         public static void Open()
         {
             instance.OpenPlayerInventory();
+        }
+
+        public static void OpenContainer(Container container)
+        {
+            instance.OpenLootContainer(container);
         }
 
         public static void CloseContainers()

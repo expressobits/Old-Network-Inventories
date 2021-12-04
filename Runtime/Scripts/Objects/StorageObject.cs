@@ -1,13 +1,16 @@
-using UnityEngine;
-using Unity.Netcode;
-using ExpressoBits.Inventory.UI;
 using System;
+using ExpressoBits.Inventory.UI;
+using Unity.Netcode;
+using UnityEngine;
 
 namespace ExpressoBits.Inventory
 {
     [RequireComponent(typeof(Container))]
     public class StorageObject : NetworkBehaviour
     {
+
+        public Container Container => container;
+
         private Container container;
         [SerializeField] private Item[] lootItems;
 
@@ -18,7 +21,7 @@ namespace ExpressoBits.Inventory
         {
             container = GetComponent<Container>();
         }
-        
+
         public override void OnNetworkSpawn()
         {
             base.OnNetworkSpawn();
@@ -26,23 +29,28 @@ namespace ExpressoBits.Inventory
             {
                 foreach (Item item in lootItems)
                 {
-                    container.Add(item,1);
+                    container.Add(item, 1);
                 }
             }
-        }
-
-        [ClientRpc]
-        public void OpenContainerClientRPC(ClientRpcParams clientRpcParams = default)
-        {
-            InventorySystemUI.Instance.OpenLootContainer(container);
         }
 
         [ClientRpc]
         private void OpenClientRpc()
         {
             OnLocalOpen?.Invoke();
-            
         }
+
+        // [ClientRpc]
+        // private void CallActionInOwnerClientRpc(NetworkObjectReference reference, ClientRpcParams rpcParams)
+        // {
+        //     if(reference.TryGet(out NetworkObject networkObject))
+        //     {
+        //         if(networkObject.TryGetComponent(out ContainerInteractor containerInteractor))
+        //         {
+        //             containerInteractor.OnOpenContainer?.Invoke(this);
+        //         }
+        //     }
+        // }
 
         [ClientRpc]
         private void CloseClientRpc()
@@ -52,17 +60,22 @@ namespace ExpressoBits.Inventory
 
         public void Open()
         {
+            // TODO logic locked storage
+            // if(locked) return locked actions
+            // ClientRpcParams clientRpcParams = new ClientRpcParams
+            // {
+            //     Send = new ClientRpcSendParams
+            //     {
+            //         TargetClientIds = new ulong[] { clientId }
+            //     }
+            // };
+            //CallActionInOwnerClientRpc(containerInteractor.NetworkObject, clientRpcParams);
             OpenClientRpc();
         }
 
         public void Close()
         {
             CloseClientRpc();
-        }
-
-        public string PreviewMessage()
-        {
-            return "open storage";
         }
     }
 }

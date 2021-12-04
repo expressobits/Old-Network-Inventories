@@ -10,13 +10,17 @@ namespace ExpressoBits.Inventory
     [RequireComponent(typeof(Container))]
     public class ContainerInteractor : NetworkBehaviour
     {
-        [SerializeField] private Container container;
-
-        public Action<Item> OnItemGet;
-
-        public static Action<Item> OnLocalItemGet;
 
         public Container Container => container;
+
+        public static Action<Item> OnOwnerItemGet;
+        public Action<Container> OnOwnerOpenContainer;
+
+        public Action<Item> OnItemGet;
+        public Action<Container> OnOpenContainer;
+        public Action<Container> OnCloseContainer;
+
+        [SerializeField] private Container container;
 
         private void Awake()
         {
@@ -49,7 +53,7 @@ namespace ExpressoBits.Inventory
             }
             else if (networkObject.TryGetComponent(out StorageObject storageObject))
             {
-                storageObject.Open();
+                OpenStorage(storageObject, true);
             }
         }
 
@@ -84,14 +88,14 @@ namespace ExpressoBits.Inventory
             if (!from.TryGet(out NetworkObject containerNetworkObject)) return;
             Container container = containerNetworkObject.GetComponentInChildren<Container>();
             if (!container) return;
-            
+
             Slot slot = container.Slots[index];
             ushort itemId = slot.ItemID;
             Item item = container.Items.GetItem(itemId);
             ushort valueNoRemoved = container.RemoveInIndex(index, amount);
 
-            Drop(container,item, (ushort)(amount-valueNoRemoved));
-            
+            Drop(container, item, (ushort)(amount - valueNoRemoved));
+
         }
 
         [ServerRpc]
@@ -117,9 +121,15 @@ namespace ExpressoBits.Inventory
         {
             if (!target.TryGet(out NetworkObject targetObject)) return;
             if (!targetObject.TryGetComponent(out StorageObject storageObject)) return;
+            OpenStorage(storageObject, open);
+        }
+
+        private void OpenStorage(StorageObject storageObject, bool open)
+        {
             if (open)
             {
                 storageObject.Open();
+                OpenContainerClientRpc(storageObject.NetworkObject);
             }
             else
             {
@@ -133,8 +143,21 @@ namespace ExpressoBits.Inventory
         private void ItemGettedClientRpc(ushort itemId)
         {
             Item item = container.Items.GetItem(itemId);
-            if (IsOwner && item != null) OnLocalItemGet?.Invoke(item);
+            if (IsOwner && item != null) OnOwnerItemGet?.Invoke(item);
             OnItemGet?.Invoke(item);
+        }
+
+        [ClientRpc]
+        private void OpenContainerClientRpc(NetworkObjectReference reference)
+        {
+            if (reference.TryGet(out NetworkObject networkObject))
+            {
+                if (networkObject.TryGetComponent(out Container container))
+                {
+                    if (IsOwner) OnOwnerOpenContainer?.Invoke(container);
+                    OnOpenContainer?.Invoke(container);
+                }
+            }
         }
         #endregion
     }
