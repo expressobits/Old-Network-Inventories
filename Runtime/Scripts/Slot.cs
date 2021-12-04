@@ -25,13 +25,6 @@ namespace ExpressoBits.Inventory
             return false;
         }
 
-        // public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter
-        // {
-        //     serializer.SerializeValue(ref itemId);
-        //     serializer.SerializeValue(ref amount);
-        //     id = UnityEngine.Random.Range(0,Int32.MaxValue);
-        // }
-
         public ushort Add(ushort value)
         {
             ushort valueToAdd = (ushort)Mathf.Min(value, Remaining);

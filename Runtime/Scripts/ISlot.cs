@@ -2,8 +2,16 @@ namespace ExpressoBits.Inventory
 {
     public interface ISlot<T> where T : IItem
     {
-        
+        /// <summary>
+        /// Slot Item Type
+        /// </summary>
+        /// <value></value>
         public T Item { get; }
+
+        /// <summary>
+        /// Total weight of slot items
+        /// </summary>
+        /// <value>Total weight</value>
         public float Weight { get; }
 
         /// <summary>

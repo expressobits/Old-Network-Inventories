@@ -3,14 +3,22 @@ using UnityEngine;
 
 namespace ExpressoBits.Inventory
 {
+    /// <summary>
+    /// Database of all items, when creating items here it automatically generates an item id
+    /// </summary>
     [CreateAssetMenu(fileName = "Items", menuName = "Expresso Bits/Inventory/Items")]
     public class Items : ScriptableObject
     {
+
         [SerializeField] private List<Item> items = new List<Item>();
 
-        public byte GetNewItemId()
+        /// <summary>
+        /// Generate new id for an item
+        /// </summary>
+        /// <returns></returns>
+        public ushort GetNewItemId()
         {
-            byte id = 1;
+            ushort id = 1;
             while(HasItem(id))
             {
                 id++;
@@ -18,13 +26,23 @@ namespace ExpressoBits.Inventory
             return id;
         }
 
-        public void Add(Item item,byte id)
+        /// <summary>
+        /// Add a new item to the database
+        /// </summary>
+        /// <param name="item"></param>
+        /// <param name="id"></param>
+        internal void Add(Item item,ushort id)
         {
             item.Setup(id);
             items.Insert(id,item);
         }
 
-        public bool HasItem(int id)
+        /// <summary>
+        /// Checks if there is an item with id
+        /// </summary>
+        /// <param name="id">Id of Item</param>
+        /// <returns>True if item exists or false if item does not exist in database</returns>
+        public bool HasItem(ushort id)
         {
             foreach(Item item in items)
             {
@@ -33,7 +51,12 @@ namespace ExpressoBits.Inventory
             return false;
         }
 
-        public Item GetItem(int id)
+        /// <summary>
+        /// Get an item with id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public Item GetItem(ushort id)
         {
             foreach(Item item in items)
             {

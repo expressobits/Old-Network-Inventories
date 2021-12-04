@@ -2,6 +2,9 @@ using UnityEngine;
 
 namespace ExpressoBits.Inventory
 {
+    /// <summary>
+    /// Category of an item, commonly used to categorize crafts
+    /// </summary>
     [CreateAssetMenu(fileName = "Category", menuName = "Expresso Bits/Inventory/Category")]
     public class Category : ScriptableObject
     {

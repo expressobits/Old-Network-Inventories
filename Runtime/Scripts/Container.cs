@@ -8,7 +8,6 @@ namespace ExpressoBits.Inventory
     {
         public Items Items => items;
         public NetworkList<Slot> Slots => slots;
-        private NetworkList<Slot> slots;
         public float Weight
         {
             get
@@ -25,6 +24,7 @@ namespace ExpressoBits.Inventory
         public static Action<Item> OnLocalItemDrop;
 
         [SerializeField] protected Items items;
+        private NetworkList<Slot> slots;
 
         /// <summary>
         /// Basic client received update event

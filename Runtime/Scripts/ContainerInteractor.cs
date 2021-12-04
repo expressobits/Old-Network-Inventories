@@ -6,7 +6,10 @@ using UnityEngine;
 
 namespace ExpressoBits.Inventory
 {
-
+    /// <summary>
+    /// Responsible for interacting with containers whether the player's own or just loots
+    /// </summary>
+    [RequireComponent(typeof(Container))]
     public class ContainerInteractor : NetworkBehaviour
     {
         [SerializeField] private Interactor interactor;

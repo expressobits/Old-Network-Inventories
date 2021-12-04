@@ -9,10 +9,10 @@ namespace ExpressoBits.Inventory
         public string Name => name;
         public string Description => description;
         public Sprite Icon => icon;
-        public float Weight => weight;
+        public Category Category => category;
         public ushort MaxStack => maxStack;
         public ItemObject ItemObjectPrefab => itemObjectPrefab;
-        public Category Category => category;
+        public float Weight => weight;
 
         [SerializeField] private ushort id = 0;
         [SerializeField, TextArea] private string description;
