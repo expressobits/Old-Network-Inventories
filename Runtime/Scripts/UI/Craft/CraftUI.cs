@@ -52,6 +52,11 @@ namespace ExpressoBits.Inventory.UI
             recipesPanel.gameObject.SetActive(false);
             OnCloseCraftUI?.Invoke();
         }
+
+        public void Clear()
+        {
+            craftsPanel.Clear();
+        }
     }
 }
 

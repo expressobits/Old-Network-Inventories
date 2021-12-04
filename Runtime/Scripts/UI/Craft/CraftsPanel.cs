@@ -13,6 +13,7 @@ namespace ExpressoBits.Inventory.UI
 
         public void SetCrafter(Crafter crafter)
         {
+            Clear();
             this.crafter = crafter;
             crafter.OnLocalAddCrafting += AddCrafting;
             crafter.OnLocalRemoveCrafting += RemoveCrafting;
@@ -41,6 +42,15 @@ namespace ExpressoBits.Inventory.UI
             CraftingInfo craftingInfo = Instantiate(craftingInfoPrefab,transform);
             craftingInfo.SetCrafting(crafter,crafting);
             craftingInfos.Add(craftingInfo);
+        }
+
+        public void Clear()
+        {
+            foreach(CraftingInfo craftingInfo in craftingInfos)
+            {
+                Destroy(craftingInfo.gameObject);
+            }
+            craftingInfos.Clear();
         }
     }
 }
