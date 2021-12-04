@@ -7,16 +7,16 @@ namespace ExpressoBits.Inventory
     public struct Slot : IEquatable<Slot>, ISlot<Item>
     {
         public Item Item => ItemID;
-        public byte ItemID => itemId;
-        public byte Amount => amount;
-        public byte MaxStack => Item.MaxStack;
-        public byte Remaining => (byte)(MaxStack - Amount);
+        public ushort ItemID => itemId;
+        public ushort Amount => amount;
+        public ushort MaxStack => Item.MaxStack;
+        public ushort Remaining => (ushort)(MaxStack - Amount);
         public bool IsEmpty => Amount <= 0;
         public bool IsSpace => Amount < MaxStack;
         public float Weight => Item.Weight * amount;
 
-        public byte itemId;
-        public byte amount;
+        public ushort itemId;
+        public ushort amount;
         public int id;
 
         public bool Equals(Slot other)
@@ -32,30 +32,34 @@ namespace ExpressoBits.Inventory
         //     id = UnityEngine.Random.Range(0,Int32.MaxValue);
         // }
 
-        public byte Add(byte value)
+        public ushort Add(ushort value)
         {
-            byte valueToAdd = (byte)Mathf.Min(value, Remaining);
+            ushort valueToAdd = (ushort)Mathf.Min(value, Remaining);
             amount += valueToAdd;
-            return (byte)(value - valueToAdd);
+            return (ushort)(value - valueToAdd);
         }
 
-        public byte Remove(byte value)
+        public ushort Remove(ushort value)
         {
-            byte valueToRemove = (byte)Mathf.Min(value, Amount);
+            ushort valueToRemove = (ushort)Mathf.Min(value, Amount);
             amount -= valueToRemove;
-            return (byte)(value - valueToRemove);
+            return (ushort)(value - valueToRemove);
         }
 
-        public static implicit operator short(Slot slot)
+        public static implicit operator int(Slot slot)
         {
-            short s = (short)(slot.itemId | (slot.amount << 8));
+            byte[] b1 = BitConverter.GetBytes(slot.itemId);
+            byte[] b2 = BitConverter.GetBytes(slot.amount);
+            int s = b1[0] | (b1[1] << 8) | (b2[0] << 16) | (b2[1] << 24);
             return s;
         }
 
-        public static implicit operator Slot(short s)
+        public static implicit operator Slot(int s)
         {
             byte[] b = BitConverter.GetBytes(s);
-            return new Slot() { itemId = b[0], amount = b[1] };
+            ushort itemId = (ushort)(b[0] | b[1] << 8);
+            ushort amount = (ushort)(b[2] << 16 | b[3] << 24);
+            return new Slot() { itemId = itemId, amount = amount};
         }
     }
 }

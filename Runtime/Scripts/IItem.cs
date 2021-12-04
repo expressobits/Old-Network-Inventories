@@ -7,7 +7,7 @@ namespace ExpressoBits.Inventory
         public string Name { get; }
         public string Description { get; }
         public Sprite Icon { get; }
-        public byte MaxStack { get; }
+        public ushort MaxStack { get; }
     }
 }
 

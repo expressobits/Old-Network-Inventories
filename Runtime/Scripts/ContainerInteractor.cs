@@ -33,12 +33,12 @@ namespace ExpressoBits.Inventory
             OpenStorageServerRpc(storageObject.NetworkObject, false);
         }
 
-        internal void RequestTrade(int index, byte amount, Container from, Container to)
+        internal void RequestTrade(int index, ushort amount, Container from, Container to)
         {
             TradeServerRpc(index, amount, from.NetworkObject, to.NetworkObject);
         }
 
-        internal void RequestDrop(int index, byte amount, Container from)
+        internal void RequestDrop(int index, ushort amount, Container from)
         {
             DropServerRpc(index, amount, from.NetworkObject);
         }
@@ -71,7 +71,7 @@ namespace ExpressoBits.Inventory
             ItemGettedClientRpc(item);
         }
 
-        public void Drop(Container container, Item item, byte amount)
+        public void Drop(Container container, Item item, ushort amount)
         {
             for (int i = 0; i < amount; i++)
             {
@@ -83,23 +83,23 @@ namespace ExpressoBits.Inventory
         }
 
         [ServerRpc]
-        private void DropServerRpc(int index, byte amount, NetworkObjectReference from)
+        private void DropServerRpc(int index, ushort amount, NetworkObjectReference from)
         {
             if (!from.TryGet(out NetworkObject containerNetworkObject)) return;
             Container container = containerNetworkObject.GetComponentInChildren<Container>();
             if (!container) return;
             
             Slot slot = container.Slots[index];
-            byte itemId = slot.ItemID;
+            ushort itemId = slot.ItemID;
             Item item = container.Items.GetItem(itemId);
-            byte valueNoRemoved = container.RemoveInIndex(index, amount);
+            ushort valueNoRemoved = container.RemoveInIndex(index, amount);
 
-            Drop(container,item, (byte)(amount-valueNoRemoved));
+            Drop(container,item, (ushort)(amount-valueNoRemoved));
             
         }
 
         [ServerRpc]
-        private void TradeServerRpc(int index, byte amount, NetworkObjectReference from, NetworkObjectReference to)
+        private void TradeServerRpc(int index, ushort amount, NetworkObjectReference from, NetworkObjectReference to)
         {
             if (!from.TryGet(out NetworkObject fromNetworkObject)) return;
             Container fromContainer = fromNetworkObject.GetComponentInChildren<Container>();
@@ -112,8 +112,8 @@ namespace ExpressoBits.Inventory
             Slot slot = fromContainer.Slots[index];
             Item item = fromContainer.Items.GetItem(slot.itemId);
 
-            byte valueNoRemoved = fromContainer.RemoveInIndex(index, amount);
-            toContainer.Add(item, (byte)(amount - valueNoRemoved));
+            ushort valueNoRemoved = fromContainer.RemoveInIndex(index, amount);
+            toContainer.Add(item, (ushort)(amount - valueNoRemoved));
         }
 
         [ServerRpc]
@@ -134,7 +134,7 @@ namespace ExpressoBits.Inventory
 
         #region Client Responses
         [ClientRpc]
-        private void ItemGettedClientRpc(byte itemId)
+        private void ItemGettedClientRpc(ushort itemId)
         {
             Item item = container.Items.GetItem(itemId);
             if (IsOwner && item != null) OnLocalItemGet?.Invoke(item);

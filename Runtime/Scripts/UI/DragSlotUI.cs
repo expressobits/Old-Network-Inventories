@@ -17,12 +17,12 @@ namespace ExpressoBits.Inventory.UI
         public int Index => index;
         public Item Item => item;
         public Container Container => container;
-        public byte Amount => amount;
+        public ushort Amount => amount;
 
         private Item item;
         private int index;
         private Container container;
-        private byte amount;
+        private ushort amount;
 
         private void OnEnable()
         {
@@ -30,7 +30,7 @@ namespace ExpressoBits.Inventory.UI
             SetTransfer(false);
         }
 
-        public void SetInfos(Item item,int index, Container container, byte amount)
+        public void SetInfos(Item item,int index, Container container, ushort amount)
         {
             this.item = item;
             this.amount = amount;
@@ -51,7 +51,7 @@ namespace ExpressoBits.Inventory.UI
             transferIcon.gameObject.SetActive(flagDrop);
         }
 
-        private void UpdateSlotData(Item item, byte amount)
+        private void UpdateSlotData(Item item, ushort amount)
         {
             if (item != null)
             {

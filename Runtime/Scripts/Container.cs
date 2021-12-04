@@ -20,8 +20,8 @@ namespace ExpressoBits.Inventory
         }
 
         public Action<Item> OnClientItemDrop;
-        public Action<Item, byte> OnClientItemRemove;
-        public Action<Item, byte> OnClientItemAdd;
+        public Action<Item, ushort> OnClientItemRemove;
+        public Action<Item, ushort> OnClientItemAdd;
         public static Action<Item> OnLocalItemDrop;
 
         [SerializeField] protected Items items;
@@ -54,7 +54,7 @@ namespace ExpressoBits.Inventory
         }
 
         #region IContainer Functions
-        public byte Add(Item item, byte amount)
+        public ushort Add(Item item, ushort amount)
         {
             for (int i = 0; i < slots.Count; i++)
             {
@@ -75,9 +75,9 @@ namespace ExpressoBits.Inventory
             return 0;
         }
 
-        public byte RemoveInIndex(int index, byte valueToRemove)
+        public ushort RemoveInIndex(int index, ushort valueToRemove)
         {
-            byte valueNoRemoved = valueToRemove;
+            ushort valueNoRemoved = valueToRemove;
             if (slots.Count > index)
             {
                 Slot slot = slots[index];
@@ -91,14 +91,14 @@ namespace ExpressoBits.Inventory
                         slots.RemoveAt(index);
                     }
                 }
-                ItemRemoveClientRpc(item, (byte)(valueToRemove - valueNoRemoved));
+                ItemRemoveClientRpc(item, (ushort)(valueToRemove - valueNoRemoved));
             }
             return valueNoRemoved;
         }
 
-        public byte Remove(Item item, byte valueToRemove)
+        public ushort Remove(Item item, ushort valueToRemove)
         {
-            byte valueNoRemoved = valueToRemove;
+            ushort valueNoRemoved = valueToRemove;
             for (int i = 0; i < slots.Count; i++)
             {
                 Slot slot = slots[i];
@@ -113,7 +113,7 @@ namespace ExpressoBits.Inventory
                     if (valueNoRemoved == 0) return 0;
                 }
             }
-            ItemRemoveClientRpc(item, (byte)(valueToRemove - valueNoRemoved));
+            ItemRemoveClientRpc(item, (ushort)(valueToRemove - valueNoRemoved));
             return valueNoRemoved;
         }
 
@@ -130,14 +130,14 @@ namespace ExpressoBits.Inventory
             return false;
         }
 
-        public bool Has(Item item, byte amount)
+        public bool Has(Item item, ushort amount)
         {
             for (int i = 0; i < slots.Count; i++)
             {
                 Slot slot = slots[i];
                 if (slot.itemId == item.ID)
                 {
-                    amount = (byte)Mathf.Max(amount - slot.amount,0);
+                    amount = (ushort)Mathf.Max(amount - slot.amount,0);
                 }
                 if (amount <= 0) return true;
             }
@@ -151,7 +151,7 @@ namespace ExpressoBits.Inventory
         #endregion
 
         [ServerRpc]
-        private void DropItemFromIndexServerRpc(int index, byte amount, Vector3 position, Quaternion rotation)
+        private void DropItemFromIndexServerRpc(int index, ushort amount, Vector3 position, Quaternion rotation)
         {
             if (slots.Count > index)
             {
@@ -159,7 +159,7 @@ namespace ExpressoBits.Inventory
                 Item item = items.GetItem(slot.itemId);
                 if (item != null)
                 {
-                    byte valueNoRemoved = RemoveInIndex(index, amount);
+                    ushort valueNoRemoved = RemoveInIndex(index, amount);
                     for (int i = valueNoRemoved; i < amount; i++)
                     {
                         ItemObject itemObjectPrefab = item.ItemObjectPrefab;
@@ -174,19 +174,19 @@ namespace ExpressoBits.Inventory
 
         #region Client Callbacks
         [ClientRpc]
-        private void ItemAddClientRpc(byte itemId, byte amount)
+        private void ItemAddClientRpc(ushort itemId, ushort amount)
         {
             OnClientItemAdd?.Invoke(itemId, amount);
         }
 
         [ClientRpc]
-        private void ItemRemoveClientRpc(byte itemId, byte amount)
+        private void ItemRemoveClientRpc(ushort itemId, ushort amount)
         {
             OnClientItemRemove?.Invoke(itemId, amount);
         }
 
         [ClientRpc]
-        internal void ItemDropClientRpc(byte itemId)
+        internal void ItemDropClientRpc(ushort itemId)
         {
             Item item = items.GetItem(itemId);
             if (IsOwner && item != null) OnLocalItemDrop?.Invoke(item);

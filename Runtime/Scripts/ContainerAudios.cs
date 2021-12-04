@@ -29,7 +29,7 @@ namespace ExpressoBits.Inventory
             container.OnClientItemRemove -= ItemGet;
         }
 
-        private void ItemGet(Item item,byte amount)
+        private void ItemGet(Item item,ushort amount)
         {
             if(getAudioClips.Length > 0)
             {
@@ -39,7 +39,7 @@ namespace ExpressoBits.Inventory
             
         }
 
-        private void ItemDrop(Item item, byte amount)
+        private void ItemDrop(Item item, ushort amount)
         {
             if(dropAudioClips.Length > 0)
             {
