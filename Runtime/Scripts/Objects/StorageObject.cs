@@ -1,18 +1,15 @@
 using UnityEngine;
 using Unity.Netcode;
-using ExpressoBits.Interactions;
 using ExpressoBits.Inventory.UI;
 using System;
 
 namespace ExpressoBits.Inventory
 {
     [RequireComponent(typeof(Container))]
-    public class StorageObject : NetworkBehaviour, IInteractable, IPreviewInteract
+    public class StorageObject : NetworkBehaviour
     {
         private Container container;
         [SerializeField] private Item[] lootItems;
-
-        public Transform Transform => transform;
 
         public Action OnLocalOpen;
         public Action OnLocalClose;
@@ -34,23 +31,8 @@ namespace ExpressoBits.Inventory
             }
         }
 
-        public void Interact(Interactor interactor)
-        {
-            if(!IsServer) return;
-            // NOTE! In case you know a list of ClientId's ahead of time, that does not need change,
-            // Then please consider caching this (as a member variable), to avoid Allocating Memory every time you run this function
-            ClientRpcParams clientRpcParams = new ClientRpcParams
-            {
-                Send = new ClientRpcSendParams
-                {
-                    TargetClientIds = new ulong[]{interactor.NetworkObject.OwnerClientId}
-                }
-            };
-            OpenContainerClientRPC(clientRpcParams);
-        }
-
         [ClientRpc]
-        private void OpenContainerClientRPC(ClientRpcParams clientRpcParams = default)
+        public void OpenContainerClientRPC(ClientRpcParams clientRpcParams = default)
         {
             InventorySystemUI.Instance.OpenLootContainer(container);
         }

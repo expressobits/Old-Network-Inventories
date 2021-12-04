@@ -1,6 +1,4 @@
 using System;
-using System.ComponentModel;
-using ExpressoBits.Interactions;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -12,7 +10,6 @@ namespace ExpressoBits.Inventory
     [RequireComponent(typeof(Container))]
     public class ContainerInteractor : NetworkBehaviour
     {
-        [SerializeField] private Interactor interactor;
         [SerializeField] private Container container;
 
         public Action<Item> OnItemGet;
@@ -24,10 +21,6 @@ namespace ExpressoBits.Inventory
         private void Awake()
         {
             container = GetComponent<Container>();
-            if (IsServer)
-            {
-                interactor.OnInteract += Interact;
-            }
         }
 
         #region Local Calls
@@ -48,7 +41,7 @@ namespace ExpressoBits.Inventory
         #endregion
 
         #region Server Tasks
-        private void Interact(NetworkObject networkObject)
+        public void Interact(NetworkObject networkObject)
         {
             if (networkObject.TryGetComponent(out ItemObject itemObject))
             {

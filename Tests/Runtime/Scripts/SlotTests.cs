@@ -9,7 +9,7 @@ namespace ExpressoBits.Inventory.Tests
         [Test]
         public void TestAmountAndInitializationOfSlot()
         {
-            Slot slot = new Slot(){ itemId = 0 };
+            Slot slot = new Slot(){ itemId = 1, amount = 0 };
             slot.Add(2);
             Assert.AreEqual(slot.Amount,2);
             //Assert.AreEqual(slot.Item,item);
@@ -18,7 +18,7 @@ namespace ExpressoBits.Inventory.Tests
         [Test]
         public void TestAddOnSlot()
         {
-            Slot slot = new Slot(){ itemId = 0 };
+            Slot slot = new Slot(){ itemId = 1 };
             Assert.AreEqual(slot.Add(1),0);
             Assert.AreEqual(slot.Amount,1);
             Assert.AreEqual(slot.Add(slot.MaxStack),1);
@@ -28,7 +28,7 @@ namespace ExpressoBits.Inventory.Tests
         [Test]
         public void TestRemoveValues()
         {
-            Slot slot = new Slot(){ itemId = 0 };
+            Slot slot = new Slot(){ itemId = 1 };
 
             slot.Add(12);
 
@@ -41,7 +41,7 @@ namespace ExpressoBits.Inventory.Tests
         [Test]
         public void TestSpace()
         {
-            Slot slot = new Slot(){ itemId = 0 };
+            Slot slot = new Slot(){ itemId = 1 };
 
             slot.Add(12);
 

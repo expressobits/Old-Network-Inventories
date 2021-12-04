@@ -1,25 +1,25 @@
 {
-    "name": "br.com.expressobits.inventory",
-    "displayName": "EB Inventory",
-    "version": "0.1.0-preview",
-    "unity": "2020.3",
-    "description": "Inventory system for unity",
-    "keywords": [
-        "gameplay"
-    ],
-    "dependencies": {
-        "com.unity.netcode.gameobjects": "1.0.0-pre.3"
-    },
-    "author": {
-        "name": "Expresso Bits"
-    },
-    "license": "MIT",
-    "homepage": "https://github.com/ExpressoBits/Inventory",
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/ExpressoBits/Inventory.git"
-    },
-    "bugs": {
-        "url": "https://github.com/ExpressoBits/Inventory/issues"
-    }
+  "name": "br.com.expressobits.inventory",
+  "displayName": "EB Inventory",
+  "version": "0.2.1-preview",
+  "unity": "2020.3",
+  "description": "Inventory system for unity",
+  "keywords": [
+    "gameplay"
+  ],
+  "dependencies": {
+    "com.unity.netcode.gameobjects": "1.0.0-pre.3"
+  },
+  "author": {
+    "name": "Expresso Bits"
+  },
+  "license": "MIT",
+  "homepage": "https://github.com/ExpressoBits/Inventory",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ExpressoBits/Inventory.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ExpressoBits/Inventory/issues"
+  }
 }
