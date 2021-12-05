@@ -33,7 +33,7 @@ namespace ExpressoBits.Inventory.Editor
             {
                 foreach (var crafting in crafter.Craftings)
                 {
-                    EditorGUILayout.LabelField("Recipe Index = " + crafting.index + " Time = " + crafting.time);
+                    EditorGUILayout.LabelField("Recipe Index = " + crafting.Index + " Time = " + crafting.Time);
                 }
             }
             else

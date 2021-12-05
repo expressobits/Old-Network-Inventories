@@ -10,8 +10,8 @@ namespace ExpressoBits.Inventory
 
         public void Set(RequiredItem requiredItem)
         {
-            icon.sprite = requiredItem.item.Icon;
-            amount.text = requiredItem.amount.ToString();
+            icon.sprite = requiredItem.Item.Icon;
+            amount.text = requiredItem.Amount.ToString();
         }
     }
 }

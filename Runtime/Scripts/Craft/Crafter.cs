@@ -50,6 +50,7 @@ namespace ExpressoBits.Inventory
         private Container container;
         private NetworkList<Crafting> craftings;
 
+        #region Unity Events
         private void Awake()
         {
             container = GetComponent<Container>();
@@ -66,11 +67,32 @@ namespace ExpressoBits.Inventory
 
         private void OnDisable()
         {
-            if(IsOwner)
+            craftings.OnListChanged -= CraftingsChanged;
+        }
+
+        private void Update()
+        {
+            if(IsCrafting && IsServer)
             {
-                craftings.OnListChanged -= CraftingsChanged;
+                for (int i = 0; i < craftings.Count; i++)
+                {
+                    Crafting crafting = craftings[i];
+                    crafting.AddTimeElapsed(Time.deltaTime);
+                    if(crafting.IsFinished)
+                    {
+                        container.Add(recipes.AllRecipes[crafting.Index].Product,1);
+                        craftings.RemoveAt(i);
+                        i--;
+                    }
+                    else
+                    {
+                        craftings[i] = crafting;
+                    }
+                }
+                
             }
         }
+        #endregion
 
         private void CraftingsChanged(NetworkListEvent<Crafting> changeEvent)
         {
@@ -86,12 +108,18 @@ namespace ExpressoBits.Inventory
             OnCraftingsChanged?.Invoke();
         }
 
+        /// <summary>
+        /// Check if it is possible to create this recipe
+        /// It is checked if the crafts limit has been exceeded and then it is checked if the recipe items contain in the container
+        /// </summary>
+        /// <param name="recipe">Recipe to be checked</param>
+        /// <returns>True if the recipe to be crafted is available</returns>
         public bool CanCraft(Recipe recipe)
         {
             if(isLimitCrafts && craftings.Count >= craftsLimit) return false;
             foreach(var items in recipe.RequiredItems)
             {
-                if(!container.Has(items.item,items.amount))
+                if(!container.Has(items.Item,items.Amount))
                 {
                     return false;
                 }
@@ -99,11 +127,11 @@ namespace ExpressoBits.Inventory
             return true;
         }
 
-        public bool UseItems(Recipe recipe)
+        private bool UseItems(Recipe recipe)
         {
             foreach(var items in recipe.RequiredItems)
             {
-                if(container.Remove(items.item,items.amount) > 0)
+                if(container.Remove(items.Item,items.Amount) > 0)
                 {
                     return false;
                 }
@@ -117,31 +145,8 @@ namespace ExpressoBits.Inventory
             {
                 if(UseItems(recipe))
                 {
-                    craftings.Add(new Crafting(){ index = recipes.AllRecipes.IndexOf(recipe), time = recipe.TimeForCraft});
+                    craftings.Add(new Crafting(recipes.AllRecipes.IndexOf(recipe),recipe.TimeForCraft));
                 }
-            }
-        }
-
-        private void Update()
-        {
-            if(IsCrafting && IsServer)
-            {
-                for (int i = 0; i < craftings.Count; i++)
-                {
-                    Crafting crafting = craftings[i];
-                    crafting.time -= Time.deltaTime;
-                    if(crafting.time < 0)
-                    {
-                        container.Add(recipes.AllRecipes[craftings[i].index].Product,1);
-                        craftings.RemoveAt(i);
-                        i--;
-                    }
-                    else
-                    {
-                        craftings[i] = crafting;
-                    }
-                }
-                
             }
         }
 
@@ -154,12 +159,20 @@ namespace ExpressoBits.Inventory
         }
 
         #region Client Calls
+        /// <summary>
+        /// Check if there are recipes available, if you have one, call an rpc server to request a new craft
+        /// </summary>
+        /// <param name="index">Craft index</param>
         public void CallCraft(int index)
         {
             if(recipes.AllRecipes.Count <= index) return;
             CraftServerRpc(index);
         }
 
+        /// <summary>
+        /// Check if there are recipes available, if you have one, call an rpc server to request a new craft
+        /// </summary>
+        /// <param name="index">Craft Recipe</param>
         public void CallCraft(Recipe recipe)
         {
             int index = recipes.AllRecipes.IndexOf(recipe);

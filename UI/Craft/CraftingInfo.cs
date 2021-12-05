@@ -11,14 +11,14 @@ namespace ExpressoBits.Inventory.UI
 
         public void SetCrafting(Crafter crafter, Crafting crafting)
         {
-            recipe = crafter.Recipes[crafting.index];
+            recipe = crafter.Recipes[crafting.Index];
             icon.sprite = recipe.Product.Icon;
             UpdateCrafting(crafting);
         }
 
         public void UpdateCrafting(Crafting crafting)
         {
-            bar.fillAmount = 1f - (crafting.time / recipe.TimeForCraft);
+            bar.fillAmount = 1f - (crafting.Time / recipe.TimeForCraft);
         }
     }
 }
