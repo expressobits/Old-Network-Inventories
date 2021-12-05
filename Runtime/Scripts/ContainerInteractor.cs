@@ -6,6 +6,7 @@ namespace ExpressoBits.Inventory
 {
     /// <summary>
     /// Responsible for interacting with containers whether the player's own or just loots
+    /// Client can ask to drop an item, exchange an item from a storage or interact with a storage
     /// </summary>
     [RequireComponent(typeof(Container))]
     public class ContainerInteractor : NetworkBehaviour
@@ -88,7 +89,7 @@ namespace ExpressoBits.Inventory
             }
         }
 
-        public void GetItem(ItemObject itemObject)
+        private void GetItem(ItemObject itemObject)
         {
             if (itemObject.IsInvalid) return;
             itemObject.SetInvalid();
@@ -102,14 +103,13 @@ namespace ExpressoBits.Inventory
             ItemTakenClientRpc(item);
         }
 
-        private void Drop(Container container, Item item, ushort amount)
+        private void Drop(Item item, ushort amount)
         {
             for (int i = 0; i < amount; i++)
             {
                 ItemObject itemObjectPrefab = item.ItemObjectPrefab;
                 ItemObject itemObject = Instantiate(itemObjectPrefab, transform.position, transform.rotation);
                 itemObject.NetworkObject.Spawn(true);
-                container.ItemDropClientRpc(item);
             }
         }
 
@@ -125,8 +125,7 @@ namespace ExpressoBits.Inventory
             Item item = container.Items.GetItem(itemId);
             ushort valueNoRemoved = container.RemoveInIndex(index, amount);
 
-            Drop(container, item, (ushort)(amount - valueNoRemoved));
-
+            Drop(item, (ushort)(amount - valueNoRemoved));
         }
 
         [ServerRpc]
@@ -155,7 +154,7 @@ namespace ExpressoBits.Inventory
             OpenStorage(storageObject, open);
         }
 
-        public void OpenStorage(StorageObject storageObject, bool open)
+        private void OpenStorage(StorageObject storageObject, bool open)
         {
             if (open)
             {

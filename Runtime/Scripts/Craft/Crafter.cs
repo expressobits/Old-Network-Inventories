@@ -8,16 +8,43 @@ namespace ExpressoBits.Inventory
     [RequireComponent(typeof(Container))]
     public class Crafter : NetworkBehaviour
     {
+        /// <summary>
+        /// Is something currently being crafted?
+        /// </summary>
         public bool IsCrafting => craftings.Count > 0f;
+        /// <summary>
+        /// List of possible recipes to craft
+        /// </summary>
         public List<Recipe> Recipes => recipes.AllRecipes;
+        /// <summary>
+        /// Crafter related container, Crafts will use this container to assess whether it is possible to craft
+        /// </summary>
         public Container Container => container;
+        /// <summary>
+        /// List of current crafts being made
+        /// </summary>
         public NetworkList<Crafting> Craftings => craftings;
 
-        public Action OnChanged;
+        /// <summary>
+        /// Event triggered when list of craftings being made is modified
+        /// </summary>
+        public Action OnCraftingsChanged;
+        /// <summary>
+        /// Event triggered when a new craft is being created
+        /// </summary>
         public Action<Crafting> OnLocalAddCrafting;
+        /// <summary>
+        /// Event triggered when one's craftings is removed from the crafting list
+        /// </summary>
         public Action<int> OnLocalRemoveCrafting;
 
-        [SerializeField] private bool limitCrafts = true;
+        /// <summary>
+        /// Is the crafting list limited?
+        /// </summary>
+        [SerializeField] private bool isLimitCrafts = true;
+        /// <summary>
+        /// Maximum number of craftings if limit is used
+        /// </summary>
         [SerializeField] private uint craftsLimit = 8;
         [SerializeField] private Recipes recipes;
         private Container container;
@@ -56,12 +83,12 @@ namespace ExpressoBits.Inventory
                     OnLocalRemoveCrafting?.Invoke(changeEvent.Index);
                     break;
             }
-            OnChanged?.Invoke();
+            OnCraftingsChanged?.Invoke();
         }
 
         public bool CanCraft(Recipe recipe)
         {
-            if(limitCrafts && craftings.Count >= craftsLimit) return false;
+            if(isLimitCrafts && craftings.Count >= craftsLimit) return false;
             foreach(var items in recipe.RequiredItems)
             {
                 if(!container.Has(items.item,items.amount))

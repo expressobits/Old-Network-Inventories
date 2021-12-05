@@ -2,7 +2,8 @@
     "name": "ExpressoBits.Inventory.Editor",
     "rootNamespace": "ExpressoBits.Inventory.Editor",
     "references": [
-        "ExpressoBits.Inventory"
+        "ExpressoBits.Inventory",
+        "Unity.Netcode.Runtime"
     ],
     "includePlatforms": [
         "Editor"

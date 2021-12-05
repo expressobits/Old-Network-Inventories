@@ -18,10 +18,8 @@ namespace ExpressoBits.Inventory
             }
         }
 
-        public Action<Item> OnClientItemDrop;
-        public Action<Item, ushort> OnClientItemRemove;
-        public Action<Item, ushort> OnClientItemAdd;
-        public static Action<Item> OnLocalItemDrop;
+        public Action<Item, ushort> OnItemRemove;
+        public Action<Item, ushort> OnItemAdd;
 
         [SerializeField] protected Items items;
         private NetworkList<Slot> slots;
@@ -154,21 +152,13 @@ namespace ExpressoBits.Inventory
         [ClientRpc]
         private void ItemAddClientRpc(ushort itemId, ushort amount)
         {
-            OnClientItemAdd?.Invoke(itemId, amount);
+            OnItemAdd?.Invoke(itemId, amount);
         }
 
         [ClientRpc]
         private void ItemRemoveClientRpc(ushort itemId, ushort amount)
         {
-            OnClientItemRemove?.Invoke(itemId, amount);
-        }
-
-        [ClientRpc]
-        internal void ItemDropClientRpc(ushort itemId)
-        {
-            Item item = items.GetItem(itemId);
-            if (IsOwner && item != null) OnLocalItemDrop?.Invoke(item);
-            OnClientItemDrop?.Invoke(item);
+            OnItemRemove?.Invoke(itemId, amount);
         }
         #endregion
 
