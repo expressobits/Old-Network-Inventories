@@ -2,7 +2,7 @@ using System;
 using Unity.Netcode;
 using UnityEngine;
 
-namespace ExpressoBits.Inventory
+namespace ExpressoBits.Inventories
 {
     /// <summary>
     /// Responsible for interacting with containers whether the player's own or just loots
@@ -92,15 +92,28 @@ namespace ExpressoBits.Inventory
         private void GetItem(ItemObject itemObject)
         {
             if (itemObject.IsInvalid) return;
-            itemObject.SetInvalid();
-            Add(itemObject.Item);
-            itemObject.NetworkObject.Despawn();
+            if(container.Add(itemObject.Item, 1) == 0)
+            {
+                ItemTakenClientRpc(itemObject.Item);
+                itemObject.SetInvalid();
+                itemObject.NetworkObject.Despawn();
+            }
         }
 
-        public void Add(Item item)
+        /// <summary>
+        /// If possible add the item in the player's container, if not possible drop the item
+        /// </summary>
+        /// <param name="item">Item to be added to player inventory</param>
+        /// <returns></returns>
+        public bool AddOrDropItem(Item item)
         {
-            container.Add(item, 1);
-            ItemTakenClientRpc(item);
+            if(container.Add(item, 1) == 0)
+            {
+                ItemTakenClientRpc(item);
+                return true;
+            }
+            Drop(item,1);
+            return false;
         }
 
         private void Drop(Item item, ushort amount)
@@ -143,7 +156,8 @@ namespace ExpressoBits.Inventory
             Item item = fromContainer.Items.GetItem(slot.itemId);
 
             ushort valueNoRemoved = fromContainer.RemoveInIndex(index, amount);
-            toContainer.Add(item, (ushort)(amount - valueNoRemoved));
+            ushort valueNoAdded = toContainer.Add(item, (ushort)(amount - valueNoRemoved));
+            if(valueNoAdded > 0) fromContainer.Add(item,valueNoAdded);
         }
 
         [ServerRpc]

@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace ExpressoBits.Inventory
+namespace ExpressoBits.Inventories
 {
     /// <summary>
     /// List of all possible crafts

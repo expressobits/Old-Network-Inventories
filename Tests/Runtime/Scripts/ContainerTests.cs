@@ -1,7 +1,7 @@
 using NUnit.Framework;
 using UnityEngine;
 
-namespace ExpressoBits.Inventory.Tests
+namespace ExpressoBits.Inventories.Tests
 {
     // public class ContainerTests
     // {

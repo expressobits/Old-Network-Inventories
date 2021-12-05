@@ -1,7 +1,7 @@
 using Unity.Netcode;
 using UnityEngine;
 
-namespace ExpressoBits.Inventory
+namespace ExpressoBits.Inventories
 {
     public class ItemObject : NetworkBehaviour, IItemObject
     {

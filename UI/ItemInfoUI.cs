@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace ExpressoBits.Inventory.UI
+namespace ExpressoBits.Inventories.UI
 {
     public class ItemInfoUI : MonoBehaviour
     {

@@ -1,4 +1,4 @@
-namespace ExpressoBits.Inventory
+namespace ExpressoBits.Inventories
 {
     public interface ISlot<T> where T : IItem
     {

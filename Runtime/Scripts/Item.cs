@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace ExpressoBits.Inventory
+namespace ExpressoBits.Inventories
 {
     [CreateAssetMenu(fileName = "Item", menuName = "Expresso Bits/Inventory/Item")]
     public class Item : ScriptableObject, IItem

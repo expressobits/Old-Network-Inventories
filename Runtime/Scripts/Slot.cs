@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-namespace ExpressoBits.Inventory
+namespace ExpressoBits.Inventories
 {
     public struct Slot : IEquatable<Slot>, ISlot<Item>
     {

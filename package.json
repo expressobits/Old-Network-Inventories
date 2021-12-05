@@ -1,6 +1,6 @@
 {
-  "name": "br.com.expressobits.inventory",
-  "displayName": "EB Inventory",
+  "name": "br.com.expressobits.inventories",
+  "displayName": "EB Inventories",
   "version": "0.2.1-preview",
   "unity": "2020.3",
   "description": "Inventory system for unity",
@@ -14,12 +14,12 @@
     "name": "Expresso Bits"
   },
   "license": "MIT",
-  "homepage": "https://github.com/ExpressoBits/Inventory",
+  "homepage": "https://github.com/ExpressoBits/Inventories",
   "repository": {
     "type": "git",
-    "url": "https://github.com/ExpressoBits/Inventory.git"
+    "url": "https://github.com/ExpressoBits/Inventories.git"
   },
   "bugs": {
-    "url": "https://github.com/ExpressoBits/Inventory/issues"
+    "url": "https://github.com/ExpressoBits/Inventories/issues"
   }
 }

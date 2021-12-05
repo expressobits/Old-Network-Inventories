@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-namespace ExpressoBits.Inventory.UI
+namespace ExpressoBits.Inventories.UI
 {
     public class CraftUI : MonoBehaviour
     {

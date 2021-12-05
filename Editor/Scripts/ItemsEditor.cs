@@ -1,7 +1,7 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace ExpressoBits.Inventory.Editor
+namespace ExpressoBits.Inventories.Editor
 {
     [CustomEditor(typeof(Items))]
     public class ItemsEditor : UnityEditor.Editor

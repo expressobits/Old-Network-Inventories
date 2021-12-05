@@ -1,6 +1,6 @@
 using System;
 
-namespace ExpressoBits.Inventory
+namespace ExpressoBits.Inventories
 {
     /// <summary>
     /// Structure of a crafting , here is stored the index of the recipe to be created and the current time of the craft

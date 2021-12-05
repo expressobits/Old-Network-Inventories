@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace ExpressoBits.Inventory
+namespace ExpressoBits.Inventories
 {
     public class RequiredItemUI : MonoBehaviour
     {

@@ -2,7 +2,7 @@ using System;
 using Unity.Netcode;
 using UnityEngine;
 
-namespace ExpressoBits.Inventory
+namespace ExpressoBits.Inventories
 {
     public class Container : NetworkBehaviour, IContainer<Item>
     {
@@ -23,6 +23,8 @@ namespace ExpressoBits.Inventory
 
         [SerializeField] protected Items items;
         private NetworkList<Slot> slots;
+        [SerializeField] private bool haveSlotAmountLimit;
+        [SerializeField] private int slotAmountLimit = 8;
 
         /// <summary>
         /// Basic client received update event
@@ -68,9 +70,13 @@ namespace ExpressoBits.Inventory
                     }
                 }
             }
-            slots.Add(new Slot() { itemId = item.ID, amount = amount, id = UnityEngine.Random.Range(0, Int32.MaxValue) });
-            ItemAddClientRpc(item, amount);
-            return 0;
+            if(!haveSlotAmountLimit || Slots.Count < slotAmountLimit)
+            {
+                slots.Add(new Slot() { itemId = item.ID, amount = amount, id = UnityEngine.Random.Range(0, int.MaxValue) });
+                ItemAddClientRpc(item, amount);
+                amount = 0;
+            }
+            return amount;
         }
 
         public ushort RemoveInIndex(int index, ushort valueToRemove)

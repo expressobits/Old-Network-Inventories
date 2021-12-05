@@ -1,6 +1,6 @@
 using Unity.Netcode;
 
-namespace ExpressoBits.Inventory
+namespace ExpressoBits.Inventories
 {
     /// <summary>
     /// Model of any structure that contains items (IItem)

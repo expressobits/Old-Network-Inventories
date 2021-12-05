@@ -3,7 +3,8 @@
     "rootNamespace": "ExpressoBits.Inventory.UI",
     "references": [
         "GUID:4fdf46937d831f44dbee8eba7fcf8632",
-        "GUID:1491147abca9d7d4bb7105af628b223e"
+        "GUID:1491147abca9d7d4bb7105af628b223e",
+        "GUID:2bafac87e7f4b9b418d9448d219b01ab"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

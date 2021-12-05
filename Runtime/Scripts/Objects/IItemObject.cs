@@ -1,4 +1,4 @@
-namespace ExpressoBits.Inventory
+namespace ExpressoBits.Inventories
 {
     /// <summary>
     /// Component added to gameobject that represents the Item,

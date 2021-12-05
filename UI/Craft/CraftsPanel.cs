@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
 
-namespace ExpressoBits.Inventory.UI
+namespace ExpressoBits.Inventories.UI
 {
     public class CraftsPanel : MonoBehaviour
     {

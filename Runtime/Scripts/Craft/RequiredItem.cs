@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace ExpressoBits.Inventory
+namespace ExpressoBits.Inventories
 {
     /// <summary>
     /// Item required by a craft, also stores amount information

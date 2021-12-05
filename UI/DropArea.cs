@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-namespace ExpressoBits.Inventory.UI
+namespace ExpressoBits.Inventories.UI
 {
     public class DropArea : MonoBehaviour, IPointerUpHandler, IPointerDownHandler, IPointerEnterHandler, IPointerExitHandler, IDropHandler, IDragHandler
     {

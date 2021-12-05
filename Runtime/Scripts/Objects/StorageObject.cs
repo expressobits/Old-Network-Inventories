@@ -2,7 +2,7 @@ using System;
 using Unity.Netcode;
 using UnityEngine;
 
-namespace ExpressoBits.Inventory
+namespace ExpressoBits.Inventories
 {
     [RequireComponent(typeof(Container))]
     public class StorageObject : NetworkBehaviour

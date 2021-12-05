@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-namespace ExpressoBits.Inventory.UI
+namespace ExpressoBits.Inventories.UI
 {
     public class SlotUI : MonoBehaviour, IPointerDownHandler,IPointerEnterHandler, IDragHandler//, IDropHandler
     {

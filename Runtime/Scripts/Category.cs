@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace ExpressoBits.Inventory
+namespace ExpressoBits.Inventories
 {
     /// <summary>
     /// Category of an item, commonly used to categorize crafts

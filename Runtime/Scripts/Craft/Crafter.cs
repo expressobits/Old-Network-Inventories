@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
 
-namespace ExpressoBits.Inventory
+namespace ExpressoBits.Inventories
 {
     [RequireComponent(typeof(Container))]
     public class Crafter : NetworkBehaviour
@@ -48,12 +48,14 @@ namespace ExpressoBits.Inventory
         [SerializeField] private uint craftsLimit = 8;
         [SerializeField] private Recipes recipes;
         private Container container;
+        private ContainerInteractor containerInteractor;
         private NetworkList<Crafting> craftings;
 
         #region Unity Events
         private void Awake()
         {
             container = GetComponent<Container>();
+            containerInteractor = GetComponent<ContainerInteractor>();
             craftings = new NetworkList<Crafting>();
         }
 
@@ -80,7 +82,7 @@ namespace ExpressoBits.Inventory
                     crafting.AddTimeElapsed(Time.deltaTime);
                     if(crafting.IsFinished)
                     {
-                        container.Add(recipes.AllRecipes[crafting.Index].Product,1);
+                        containerInteractor.AddOrDropItem(recipes.AllRecipes[crafting.Index].Product);
                         craftings.RemoveAt(i);
                         i--;
                     }

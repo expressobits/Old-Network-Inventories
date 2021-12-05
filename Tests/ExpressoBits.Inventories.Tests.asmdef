@@ -1,10 +1,10 @@
 {
-    "name": "ExpressoBits.Inventory.Tests",
-    "rootNamespace": "ExpressoBits.Inventory.Tests",
+    "name": "ExpressoBits.Inventories.Tests",
+    "rootNamespace": "ExpressoBits.Inventories.Tests",
     "references": [
         "UnityEngine.TestRunner",
         "UnityEditor.TestRunner",
-        "ExpressoBits.Inventory",
+        "ExpressoBits.Inventories",
         "Unity.Netcode.Runtime"
     ],
     "includePlatforms": [],

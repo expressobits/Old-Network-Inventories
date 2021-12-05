@@ -2,7 +2,7 @@ using System;
 using UnityEditor;
 using UnityEngine;
 
-namespace ExpressoBits.Inventory.Editor
+namespace ExpressoBits.Inventories.Editor
 {
     public class EditorUtils
     {
