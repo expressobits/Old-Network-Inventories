@@ -25,7 +25,7 @@
 
 ## Use
 
-See on [@Wiki](https://github.com/ExpressoBits/Inventories/wiki)
+See on [Wiki](https://github.com/ExpressoBits/Inventories/wiki)
 
 ## Install
 
