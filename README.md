@@ -25,12 +25,30 @@
 
 ## Install
 
+### With Git Url
 
 To install open <b>Window</b> > <b>Package Manager</b> and click on the + package icon and choose <b>"Add package from git url"</b> and type:
 
 > https://github.com/ExpressoBits/Inventories.git
 
 and you're done!
+
+### With OpenUPM
+1. Add openupm registry. Click on the menu <b>Edit -> Project settings...</b>, and add a scoped registry like so:
+
+Name: OpenUPM
+
+Url: https://package.openupm.com
+
+Scopes:
+
+```com.openupm```
+```br.com.expressobits```
+
+
+2. Close the project settings
+3. Open the package manager. Click on menu Window -> Package Manager and select "Packages: My Registries", select the latest version of __Inventories__ and click install
+4. You may come back to the package manager to unistall __Inventories__ or upgrade it.
 
 
 
