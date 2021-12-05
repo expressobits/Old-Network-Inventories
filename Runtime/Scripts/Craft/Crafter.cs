@@ -13,9 +13,12 @@ namespace ExpressoBits.Inventory
         public Container Container => container;
         public NetworkList<Crafting> Craftings => craftings;
 
+        public Action OnChanged;
         public Action<Crafting> OnLocalAddCrafting;
         public Action<int> OnLocalRemoveCrafting;
 
+        [SerializeField] private bool limitCrafts = true;
+        [SerializeField] private uint craftsLimit = 8;
         [SerializeField] private Recipes recipes;
         private Container container;
         private NetworkList<Crafting> craftings;
@@ -53,10 +56,12 @@ namespace ExpressoBits.Inventory
                     OnLocalRemoveCrafting?.Invoke(changeEvent.Index);
                     break;
             }
+            OnChanged?.Invoke();
         }
 
         public bool CanCraft(Recipe recipe)
         {
+            if(limitCrafts && craftings.Count >= craftsLimit) return false;
             foreach(var items in recipe.RequiredItems)
             {
                 if(!container.Has(items.item,items.amount))

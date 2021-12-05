@@ -34,10 +34,15 @@ namespace ExpressoBits.Inventory.UI
 
         public void SetCrafter(Crafter crafter)
         {
-            if(crafter && crafter != null) crafter.Container.OnChanged -= ChangedContainer;
+            if(crafter && crafter != null) 
+            {
+                crafter.OnChanged -= ChangedContainer;
+                crafter.Container.OnChanged -= ChangedContainer;
+            }
             this.crafter = crafter;
             recipesPanel.SetCrafter(crafter);
             crafter.Container.OnChanged += ChangedContainer;
+            crafter.OnChanged += ChangedContainer;
             craftsPanel.SetCrafter(crafter);
         }
 

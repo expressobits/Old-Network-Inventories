@@ -16,12 +16,15 @@ namespace ExpressoBits.Inventory
         public Container Container => container;
 
         /// <summary>
-        /// Events fired only on the client that has the interactor's owener
+        /// Events fired only on the client that has the interactor's owner
         /// </summary>
-        public Action<Item> OnOwnerItemGet;
+        public Action<Item> OnOwnerItemTaken;
         public Action<Container> OnOwnerOpenContainer;
 
-        public Action<Item> OnItemGet;
+        /// <summary>
+        /// Events fired on all clients
+        /// </summary>
+        public Action<Item> OnItemTaken;
         public Action<Container> OnOpenContainer;
         public Action<Container> OnCloseContainer;
 
@@ -33,16 +36,33 @@ namespace ExpressoBits.Inventory
         }
 
         #region Local Calls
+        /// <summary>
+        /// Makes a request to the server to close a stock, the parameter must be a StorageObject with NetworkObject
+        /// </summary>
+        /// <param name="storageObject">StorageObject with NetworkObject</param>
         public void RequestCloseStorage(StorageObject storageObject)
         {
             OpenStorageServerRpc(storageObject.NetworkObject, false);
         }
 
+        /// <summary>
+        /// Makes a request for a switch between containers
+        /// </summary>
+        /// <param name="index">Slot index to be trade</param>
+        /// <param name="amount">Amount to be trade</param>
+        /// <param name="from">Container where the slot comes from</param>
+        /// <param name="to">Container where the slot goes</param>
         public void RequestTrade(int index, ushort amount, Container from, Container to)
         {
             TradeServerRpc(index, amount, from.NetworkObject, to.NetworkObject);
         }
 
+        /// <summary>
+        /// Make a request to drop an item from a container
+        /// </summary>
+        /// <param name="index">Slot index to be drop</param>
+        /// <param name="amount">Amount to be drop</param>
+        /// <param name="from">Container where the slot we want to drop is</param>
         public void RequestDrop(int index, ushort amount, Container from)
         {
             DropServerRpc(index, amount, from.NetworkObject);
@@ -50,7 +70,13 @@ namespace ExpressoBits.Inventory
         #endregion
 
         #region Server Tasks
-        public void Interact(NetworkObject networkObject)
+        /// <summary>
+        /// Calls an interaction with network object, if this object is an item it will be added to the container,
+        /// if it is a storageObject it will open the storage
+        /// </summary>
+        /// REVIEW Change responsibility for the interactables
+        /// <param name="networkObject">ItemObject or StorageObject</param>
+        public virtual void Interact(NetworkObject networkObject)
         {
             if (networkObject.TryGetComponent(out ItemObject itemObject))
             {
@@ -62,7 +88,7 @@ namespace ExpressoBits.Inventory
             }
         }
 
-        private void GetItem(ItemObject itemObject)
+        public void GetItem(ItemObject itemObject)
         {
             if (itemObject.IsInvalid) return;
             itemObject.SetInvalid();
@@ -73,10 +99,10 @@ namespace ExpressoBits.Inventory
         public void Add(Item item)
         {
             container.Add(item, 1);
-            ItemGettedClientRpc(item);
+            ItemTakenClientRpc(item);
         }
 
-        public void Drop(Container container, Item item, ushort amount)
+        private void Drop(Container container, Item item, ushort amount)
         {
             for (int i = 0; i < amount; i++)
             {
@@ -129,7 +155,7 @@ namespace ExpressoBits.Inventory
             OpenStorage(storageObject, open);
         }
 
-        private void OpenStorage(StorageObject storageObject, bool open)
+        public void OpenStorage(StorageObject storageObject, bool open)
         {
             if (open)
             {
@@ -145,24 +171,20 @@ namespace ExpressoBits.Inventory
 
         #region Client Responses
         [ClientRpc]
-        private void ItemGettedClientRpc(ushort itemId)
+        private void ItemTakenClientRpc(ushort itemId)
         {
             Item item = container.Items.GetItem(itemId);
-            if (IsOwner && item != null) OnOwnerItemGet?.Invoke(item);
-            OnItemGet?.Invoke(item);
+            if (IsOwner && item != null) OnOwnerItemTaken?.Invoke(item);
+            OnItemTaken?.Invoke(item);
         }
 
         [ClientRpc]
         private void OpenContainerClientRpc(NetworkObjectReference reference)
         {
-            if (reference.TryGet(out NetworkObject networkObject))
-            {
-                if (networkObject.TryGetComponent(out Container container))
-                {
-                    if (IsOwner) OnOwnerOpenContainer?.Invoke(container);
-                    OnOpenContainer?.Invoke(container);
-                }
-            }
+            if (!reference.TryGet(out NetworkObject targetObject)) return;
+            if (!targetObject.TryGetComponent(out Container container)) return;
+            if (IsOwner) OnOwnerOpenContainer?.Invoke(container);
+            OnOpenContainer?.Invoke(container);
         }
         #endregion
     }
