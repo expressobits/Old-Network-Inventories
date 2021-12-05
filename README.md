@@ -1,3 +1,4 @@
+![Banner](https://raw.githubusercontent.com/wiki/ExpressoBits/Inventories/banner.png)
 # Welcome to Expresso Bits Inventories 👋
 ![Version](https://img.shields.io/badge/version-0.2.1-yellow.svg?cacheSeconds=2592000)
 [![Documentation](https://img.shields.io/badge/documentation-no-brightred.svg)](todo-doc)
