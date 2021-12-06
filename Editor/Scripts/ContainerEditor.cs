@@ -8,6 +8,7 @@ namespace ExpressoBits.Inventories.Editor
     {
 
         SerializedProperty itemsSerializedProperty;
+        SerializedProperty slotsReadPermissionSerializedProperty;
         SerializedProperty haveSlotAmountLimitSerializedProperty;
         SerializedProperty slotAmountLimitSerializedProperty;
 
@@ -15,10 +16,12 @@ namespace ExpressoBits.Inventories.Editor
         {
             Container container = (Container)target;
             itemsSerializedProperty = serializedObject.FindProperty("items");
+            slotsReadPermissionSerializedProperty = serializedObject.FindProperty("slotsReadPermission");
             haveSlotAmountLimitSerializedProperty = serializedObject.FindProperty("haveSlotAmountLimit");
             slotAmountLimitSerializedProperty = serializedObject.FindProperty("slotAmountLimit");
 
             EditorGUILayout.PropertyField(itemsSerializedProperty);
+            EditorGUILayout.PropertyField(slotsReadPermissionSerializedProperty);
             EditorGUILayout.PropertyField(haveSlotAmountLimitSerializedProperty);
             if(haveSlotAmountLimitSerializedProperty.boolValue)
             {

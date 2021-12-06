@@ -10,6 +10,7 @@ namespace ExpressoBits.Inventories.Editor
         SerializedProperty recipesSerializedProperty;
         SerializedProperty isLimitCraftsSerializedProperty;
         SerializedProperty craftsLimitSerializedProperty;
+        SerializedProperty craftingsReadPermissionSerializedProperty;
 
         public override void OnInspectorGUI()
         {
@@ -17,8 +18,10 @@ namespace ExpressoBits.Inventories.Editor
             recipesSerializedProperty = serializedObject.FindProperty("recipes");
             isLimitCraftsSerializedProperty = serializedObject.FindProperty("isLimitCrafts");
             craftsLimitSerializedProperty = serializedObject.FindProperty("craftsLimit");
+            craftingsReadPermissionSerializedProperty = serializedObject.FindProperty("craftingsReadPermission");
 
             EditorGUILayout.PropertyField(recipesSerializedProperty);
+            EditorGUILayout.PropertyField(craftingsReadPermissionSerializedProperty);
             EditorGUILayout.PropertyField(isLimitCraftsSerializedProperty);
             if (isLimitCraftsSerializedProperty.boolValue)
             {

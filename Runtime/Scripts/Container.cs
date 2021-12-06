@@ -25,6 +25,7 @@ namespace ExpressoBits.Inventories
         private NetworkList<Slot> slots;
         [SerializeField] private bool haveSlotAmountLimit;
         [SerializeField] private int slotAmountLimit = 8;
+        [SerializeField] private NetworkVariableReadPermission slotsReadPermission = NetworkVariableReadPermission.OwnerOnly;
 
         /// <summary>
         /// Basic client received update event
@@ -34,7 +35,7 @@ namespace ExpressoBits.Inventories
         #region Unity Events
         private void Awake()
         {
-            slots = new NetworkList<Slot>();
+            slots = new NetworkList<Slot>(slotsReadPermission, new Slot[0]{});
         }
 
         private void OnEnable()
