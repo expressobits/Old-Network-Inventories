@@ -50,24 +50,22 @@ namespace ExpressoBits.Inventories
         private Container container;
         private ContainerInteractor containerInteractor;
         private NetworkList<Crafting> craftings;
+        [SerializeField] private NetworkVariableReadPermission craftingsReadPermission = NetworkVariableReadPermission.OwnerOnly;
 
         #region Unity Events
         private void Awake()
         {
             container = GetComponent<Container>();
             containerInteractor = GetComponent<ContainerInteractor>();
-            craftings = new NetworkList<Crafting>();
+            craftings = new NetworkList<Crafting>(craftingsReadPermission, new Crafting[0]{});
         }
 
-        private void OnEnable()
+        public override void OnNetworkSpawn()
         {
-            if(IsOwner)
-            {
-                craftings.OnListChanged += CraftingsChanged;
-            }
+            craftings.OnListChanged += CraftingsChanged;
         }
 
-        private void OnDisable()
+        public override void OnNetworkDespawn()
         {
             craftings.OnListChanged -= CraftingsChanged;
         }
