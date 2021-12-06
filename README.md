@@ -80,8 +80,6 @@ Give a ⭐️ if this project helped you!
 
 ## 📝 License
 
-Copyright © 2020 [Rafael Correa](https://github.com/scriptsengineer).
-
 This project is [MIT](MIT) licensed.
 
 ***
