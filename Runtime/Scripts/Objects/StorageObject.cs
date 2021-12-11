@@ -4,10 +4,12 @@ using UnityEngine;
 
 namespace ExpressoBits.Inventories
 {
+    /// <summary>
+    /// An object that has a container
+    /// </summary>
     [RequireComponent(typeof(Container))]
     public class StorageObject : NetworkBehaviour
     {
-
         public Container Container => container;
 
         private Container container;
@@ -71,10 +73,15 @@ namespace ExpressoBits.Inventories
             //CallActionInOwnerClientRpc(containerInteractor.NetworkObject, clientRpcParams);
             OpenClientRpc();
         }
-
+        
         public void Close()
         {
             CloseClientRpc();
+        }
+
+        public void Action()
+        {
+            Open();
         }
     }
 }

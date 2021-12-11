@@ -9,7 +9,7 @@ namespace ExpressoBits.Inventories
     /// Client can ask to drop an item, exchange an item from a storage or interact with a storage
     /// </summary>
     [RequireComponent(typeof(Container))]
-    public class ContainerInteractor : NetworkBehaviour
+    public class Interactor : NetworkBehaviour
     {
         /// <summary>
         /// Container relacionado ao interator, normalmente o inventário do jogador
@@ -43,7 +43,7 @@ namespace ExpressoBits.Inventories
         /// <param name="storageObject">StorageObject with NetworkObject</param>
         public void RequestCloseStorage(StorageObject storageObject)
         {
-            OpenStorageServerRpc(storageObject.NetworkObject, false);
+            CloseStorageServerRpc(storageObject.NetworkObject);
         }
 
         /// <summary>
@@ -76,28 +76,40 @@ namespace ExpressoBits.Inventories
         /// if it is a storageObject it will open the storage
         /// </summary>
         /// REVIEW Change responsibility for the interactables
+        /// TODO Change to dynamic options on interact
+        /// Hold interaction button open an options wheel
         /// <param name="networkObject">ItemObject or StorageObject</param>
         public virtual void Interact(NetworkObject networkObject)
         {
-            if (networkObject.TryGetComponent(out ItemObject itemObject))
+            if (networkObject.TryGetComponent(out StorageObject storageObject))
             {
-                GetItem(itemObject);
+                OpenStorage(storageObject);
             }
-            else if (networkObject.TryGetComponent(out StorageObject storageObject))
+            else if (networkObject.TryGetComponent(out PickableItemObject pickableItemObject))
             {
-                OpenStorage(storageObject, true);
+                PickItem(pickableItemObject);
             }
         }
 
-        private void GetItem(ItemObject itemObject)
+        public void PickItem(PickableItemObject pickableItemObject)
         {
-            if (itemObject.IsInvalid) return;
-            if(container.Add(itemObject.Item, 1) == 0)
+            if (pickableItemObject.IsInvalid) return;
+            if (container.Add(pickableItemObject.ItemObject.Item, 1) == 0)
             {
-                ItemTakenClientRpc(itemObject.Item);
-                itemObject.SetInvalid();
-                itemObject.NetworkObject.Despawn();
+                ItemTakenClientRpc(pickableItemObject.ItemObject.Item);
+                pickableItemObject.Pick();
             }
+        }
+
+        public void OpenStorage(StorageObject storageObject)
+        {
+            storageObject.Open();
+            OpenContainerClientRpc(storageObject.NetworkObject);
+        }
+
+        public void CloseStorage(StorageObject storageObject)
+        {
+            storageObject.Close();
         }
 
         /// <summary>
@@ -107,12 +119,12 @@ namespace ExpressoBits.Inventories
         /// <returns></returns>
         public bool AddOrDropItem(Item item)
         {
-            if(container.Add(item, 1) == 0)
+            if (container.Add(item, 1) == 0)
             {
                 ItemTakenClientRpc(item);
                 return true;
             }
-            Drop(item,1);
+            Drop(item, 1);
             return false;
         }
 
@@ -125,7 +137,10 @@ namespace ExpressoBits.Inventories
                 itemObject.NetworkObject.Spawn(true);
             }
         }
+        #endregion
 
+
+        #region Server Rpcs
         [ServerRpc]
         private void DropServerRpc(int index, ushort amount, NetworkObjectReference from)
         {
@@ -157,28 +172,15 @@ namespace ExpressoBits.Inventories
 
             ushort valueNoRemoved = fromContainer.RemoveInIndex(index, amount);
             ushort valueNoAdded = toContainer.Add(item, (ushort)(amount - valueNoRemoved));
-            if(valueNoAdded > 0) fromContainer.Add(item,valueNoAdded);
+            if (valueNoAdded > 0) fromContainer.Add(item, valueNoAdded);
         }
 
         [ServerRpc]
-        public void OpenStorageServerRpc(NetworkObjectReference target, bool open)
+        public void CloseStorageServerRpc(NetworkObjectReference target)
         {
             if (!target.TryGet(out NetworkObject targetObject)) return;
             if (!targetObject.TryGetComponent(out StorageObject storageObject)) return;
-            OpenStorage(storageObject, open);
-        }
-
-        private void OpenStorage(StorageObject storageObject, bool open)
-        {
-            if (open)
-            {
-                storageObject.Open();
-                OpenContainerClientRpc(storageObject.NetworkObject);
-            }
-            else
-            {
-                storageObject.Close();
-            }
+            CloseStorage(storageObject);
         }
         #endregion
 

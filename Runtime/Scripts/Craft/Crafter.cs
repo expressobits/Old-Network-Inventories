@@ -48,7 +48,7 @@ namespace ExpressoBits.Inventories
         [SerializeField] private uint craftsLimit = 8;
         [SerializeField] private Recipes recipes;
         private Container container;
-        private ContainerInteractor containerInteractor;
+        private Interactor containerInteractor;
         private NetworkList<Crafting> craftings;
         [SerializeField] private NetworkVariableReadPermission craftingsReadPermission = NetworkVariableReadPermission.OwnerOnly;
 
@@ -56,7 +56,7 @@ namespace ExpressoBits.Inventories
         private void Awake()
         {
             container = GetComponent<Container>();
-            containerInteractor = GetComponent<ContainerInteractor>();
+            containerInteractor = GetComponent<Interactor>();
             craftings = new NetworkList<Crafting>(craftingsReadPermission, new Crafting[0]{});
         }
 
