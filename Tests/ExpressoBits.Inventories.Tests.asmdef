@@ -5,7 +5,8 @@
         "UnityEngine.TestRunner",
         "UnityEditor.TestRunner",
         "ExpressoBits.Inventories",
-        "Unity.Netcode.Runtime"
+        "Unity.Netcode.Runtime",
+        "ExpressoBits.Interactions"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
