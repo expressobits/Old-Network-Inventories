@@ -1,4 +1,5 @@
 using System;
+using ExpressoBits.Interactions;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -9,12 +10,14 @@ namespace ExpressoBits.Inventories
     /// Client can ask to drop an item, exchange an item from a storage or interact with a storage
     /// </summary>
     [RequireComponent(typeof(Container))]
-    public class Interactor : NetworkBehaviour
+    public class InventoryActionInteractor : NetworkBehaviour, IActionInteractor
     {
         /// <summary>
         /// Container relacionado ao interator, normalmente o inventário do jogador
         /// </summary>
         public Container Container => container;
+
+        public ActionType[] ActionTypes => new ActionType[]{ openStorageActionType, pickItemActionType };
 
         /// <summary>
         /// Events fired only on the client that has the interactor's owner
@@ -31,9 +34,14 @@ namespace ExpressoBits.Inventories
 
         private Container container;
 
+        [SerializeField] private ActionType openStorageActionType;
+        [SerializeField] private ActionType pickItemActionType;
+        [SerializeField] private Interactor interactor;
+
         private void Awake()
         {
             container = GetComponent<Container>();
+            interactor.AddInteractor(this);
         }
 
         #region Local Calls
@@ -78,16 +86,24 @@ namespace ExpressoBits.Inventories
         /// REVIEW Change responsibility for the interactables
         /// TODO Change to dynamic options on interact
         /// Hold interaction button open an options wheel
-        /// <param name="networkObject">ItemObject or StorageObject</param>
-        public virtual void Interact(NetworkObject networkObject)
+        /// <param name="interactable">ItemObject or StorageObject</param>
+        public virtual void Interact(ActionType actionType, Interactable interactable)
         {
-            if (networkObject.TryGetComponent(out StorageObject storageObject))
+            
+            if(actionType == openStorageActionType)
             {
-                OpenStorage(storageObject);
+                if (interactable.TryGetComponent(out StorageObject storageObject))
+                {
+                    OpenStorage(storageObject);
+                }
             }
-            else if (networkObject.TryGetComponent(out PickableItemObject pickableItemObject))
+
+            if(actionType == pickItemActionType)
             {
-                PickItem(pickableItemObject);
+                if (interactable.TryGetComponent(out PickableItemObject pickableItemObject))
+                {
+                    PickItem(pickableItemObject);
+                }
             }
         }
 

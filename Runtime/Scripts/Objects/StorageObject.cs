@@ -1,6 +1,7 @@
 using System;
 using Unity.Netcode;
 using UnityEngine;
+using ExpressoBits.Interactions;
 
 namespace ExpressoBits.Inventories
 {
@@ -8,7 +9,7 @@ namespace ExpressoBits.Inventories
     /// An object that has a container
     /// </summary>
     [RequireComponent(typeof(Container))]
-    public class StorageObject : NetworkBehaviour
+    public class StorageObject : InteractableAction
     {
         public Container Container => container;
 
@@ -79,10 +80,12 @@ namespace ExpressoBits.Inventories
             CloseClientRpc();
         }
 
-        public void Action()
+        public override void Action(Interactor interactor)
         {
             Open();
         }
+
+        public override string PreviewMessage => "to open";
     }
 }
 

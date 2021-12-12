@@ -2,7 +2,8 @@
     "name": "ExpressoBits.Inventories",
     "rootNamespace": "ExpressoBits.Inventories",
     "references": [
-        "GUID:1491147abca9d7d4bb7105af628b223e"
+        "GUID:1491147abca9d7d4bb7105af628b223e",
+        "GUID:62927b49791a4304d9b8bd73dcc2bdc2"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
