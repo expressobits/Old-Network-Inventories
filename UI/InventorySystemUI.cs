@@ -19,12 +19,12 @@ namespace ExpressoBits.Inventories.UI
         [SerializeField] private ContainerUI playerContainer;
         [SerializeField] private ContainerUI lootContainer;
 
-        private InventoryActionInteractor characterInventory;
+        private InventoryInteractor characterInventory;
         
         public Action OnInventoryOpen;
         public Action OnInventoryClose;
         public Action<SlotUI> OnPointerDown;
-        public Action<InventoryActionInteractor> OnSetupContainerInteractor;
+        public Action<InventoryInteractor> OnSetupContainerInteractor;
 
         public bool IsOpen => playerContainer.gameObject.activeSelf;
 
@@ -63,7 +63,7 @@ namespace ExpressoBits.Inventories.UI
             selectSlot.Clear();
         }
 
-        public void SetCharacterInventory(InventoryActionInteractor containerInteractor)
+        public void SetCharacterInventory(InventoryInteractor containerInteractor)
         {
             this.characterInventory = containerInteractor;
             playerContainer.SetContainer(containerInteractor.Container);
